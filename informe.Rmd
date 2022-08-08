@@ -1,6 +1,6 @@
 ---
 title: "titulo"
-author: "Maria Florencia Aguilera"
+author: "Maria Florencia Aguilera y Rocío Ospitaleche"
 output: html_document
 ---
 
