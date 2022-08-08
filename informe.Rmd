@@ -1,5 +1,5 @@
 ---
-title: "titulo"
+title: "Encuesta Permanente de Hogares - Género"
 author: "Maria Florencia Aguilera y Rocío Ospitaleche"
 output: html_document
 ---
@@ -7,7 +7,8 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-# Cargar los paquetes necesarios acá
+# install.packages('eph')
+
 ```
 
 
