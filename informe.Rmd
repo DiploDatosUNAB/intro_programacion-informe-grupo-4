@@ -7,8 +7,12 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-# install.packages('eph')
+library(eph)
+```
 
+```{r}
+library(readxl)
+empleo_genero <- read_excel("datos/empleo_genero.xlsx")
 ```
 
 
