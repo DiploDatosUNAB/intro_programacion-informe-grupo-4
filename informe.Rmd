@@ -15,6 +15,10 @@ library(readxl)
 empleo_genero <- read_excel("datos/empleo_genero.xlsx")
 ```
 
+```{r}
+head(empleo_genero)
+```
+
 
 ## Introducción
 
