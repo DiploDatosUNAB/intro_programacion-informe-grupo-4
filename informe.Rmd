@@ -51,6 +51,17 @@ str(empleo_genero_ordenado)
 La tabla tiene 1127 observaciones y 23 variables: 
 
 
+```{r}
+empleo_argentina <- filter(empleo_genero_ordenado, pais_region == Argentina)
+```
+
+```{r}
+empleo_argentina
+```
+
+```{r}
+summarise(empleo_argentina,)
+```
 
 
 ## Hipótesis
