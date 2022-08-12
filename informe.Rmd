@@ -3,40 +3,52 @@ title: "Encuesta Permanente de Hogares - Género"
 author: "Maria Florencia Aguilera y Rocío Ospitaleche"
 output: html_document
 ---
+## Introducción
+En el presente informe se utilizan datos sobre empleo- desempleo y género provenientes del Banco Mundial. 
+Se analizan variables relacionadas con la participación de mujeres y hombres en el empleo en distintas ramas de actividad, desempleo, autoempleo, empleadores, trabajo doméstico no remunerado. 
+También incluye el dato de la existencia o no de legislación contra el acoso sexual. Los datos son de algunos países de Latinoamérica y el Caribe, para los años que van desde 1970 hasta 2018.(aunque no hay datos de todos los países ni de todos los años)
 
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(eph)
+library(tidyr)
+library(readr)
+library(dplyr)
 ```
-
-```{r}
-library(readxl)
-empleo_genero <- read_excel("datos/empleo_genero.xlsx")
-```
-
-```{r}
-head(empleo_genero)
-```
-
-
-## Introducción
-
-
 
 ## Exploración de los datos
 
+```{r}
+empleo_genero <- read_csv("datos/empleo_genero.csv")
+```
 
 ```{r}
-# Código para cargar o leer los datos
+empleo_latin <- pivot_longer(empleo_genero, cols=4:52, names_to = "Anio")
+```
+
+```{r}
+empleo_genero_ordenado <- pivot_wider(empleo_latin, names_from = variable,
+values_from = value)
 ```
 
 
 
 ```{r}
-# Cödigo de R acá 
-# Agregá más bloques según sea necesario
+empleo_genero_ordenado
 ```
+
+
+
+
+
+
+
+```{r}
+str(empleo_genero_ordenado)
+```
+La tabla tiene 1127 observaciones y 23 variables: 
+
 
 
 

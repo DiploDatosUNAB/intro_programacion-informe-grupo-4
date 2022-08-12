@@ -369,16 +369,79 @@ Género</h1>
 </div>
 
 
-<pre class="r"><code>library(readxl)
-empleo_genero &lt;- read_excel(&quot;datos/empleo_genero.xlsx&quot;)</code></pre>
 <div id="introducción" class="section level2">
 <h2>Introducción</h2>
+<p>En el presente informe se utilizan datos sobre empleo- desempleo y
+género provenientes del Banco Mundial. Se analizan variables
+relacionadas con la participación de mujeres y hombres en el empleo en
+distintas ramas de actividad, desempleo, autoempleo, empleadores,
+trabajo doméstico no remunerado. También incluye el dato de la
+existencia o no de legislación contra el acoso sexual. Los datos son de
+algunos países de Latinoamérica y el Caribe, para los años que van desde
+1970 hasta 2018.(aunque no hay datos de todos los países ni de todos los
+años)</p>
 </div>
 <div id="exploración-de-los-datos" class="section level2">
 <h2>Exploración de los datos</h2>
-<pre class="r"><code># Código para cargar o leer los datos</code></pre>
-<pre class="r"><code># Cödigo de R acá 
-# Agregá más bloques según sea necesario</code></pre>
+<pre class="r"><code>empleo_genero &lt;- read_csv(&quot;datos/empleo_genero.csv&quot;)</code></pre>
+<pre><code>## Rows: 460 Columns: 52
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr  (3): variable, pais_region, codigo_pais_region
+## dbl (49): 1970, 1971, 1972, 1973, 1974, 1975, 1976, 1977, 1978, 1979, 1980, ...
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>empleo_latin &lt;- pivot_longer(empleo_genero, cols=4:52, names_to = &quot;Anio&quot;)</code></pre>
+<pre class="r"><code>empleo_genero_ordenado &lt;- pivot_wider(empleo_latin, names_from = variable,
+values_from = value)</code></pre>
+<pre class="r"><code>empleo_genero_ordenado</code></pre>
+<pre><code>## # A tibble: 1,127 × 23
+##    pais_region codigo_pais_region Anio  empleadoras_mujeres empleadores_hombres
+##    &lt;chr&gt;       &lt;chr&gt;              &lt;chr&gt;               &lt;dbl&gt;               &lt;dbl&gt;
+##  1 Argentina   ARG                1970                   NA                  NA
+##  2 Argentina   ARG                1971                   NA                  NA
+##  3 Argentina   ARG                1972                   NA                  NA
+##  4 Argentina   ARG                1973                   NA                  NA
+##  5 Argentina   ARG                1974                   NA                  NA
+##  6 Argentina   ARG                1975                   NA                  NA
+##  7 Argentina   ARG                1976                   NA                  NA
+##  8 Argentina   ARG                1977                   NA                  NA
+##  9 Argentina   ARG                1978                   NA                  NA
+## 10 Argentina   ARG                1979                   NA                  NA
+## # … with 1,117 more rows, and 18 more variables:
+## #   empleo_agricultura_mujeres &lt;dbl&gt;, empleo_agricultura_hombres &lt;dbl&gt;,
+## #   empleo_industria_mujeres &lt;dbl&gt;, empleo_industria_hombres &lt;dbl&gt;,
+## #   empleo_servicios_mujeres &lt;dbl&gt;, empleo_servicios_hombres &lt;dbl&gt;,
+## #   empleo_informal_mujeres &lt;dbl&gt;, empleo_informal_hombres &lt;dbl&gt;,
+## #   legislacion_acoso_sexual &lt;dbl&gt;, autoempleo_mujeres &lt;dbl&gt;,
+## #   autoempleo_hombres &lt;dbl&gt;, empleo_parcial_mujeres &lt;dbl&gt;, …</code></pre>
+<pre class="r"><code>str(empleo_genero_ordenado)</code></pre>
+<pre><code>## tibble [1,127 × 23] (S3: tbl_df/tbl/data.frame)
+##  $ pais_region                            : chr [1:1127] &quot;Argentina&quot; &quot;Argentina&quot; &quot;Argentina&quot; &quot;Argentina&quot; ...
+##  $ codigo_pais_region                     : chr [1:1127] &quot;ARG&quot; &quot;ARG&quot; &quot;ARG&quot; &quot;ARG&quot; ...
+##  $ Anio                                   : chr [1:1127] &quot;1970&quot; &quot;1971&quot; &quot;1972&quot; &quot;1973&quot; ...
+##  $ empleadoras_mujeres                    : num [1:1127] NA NA NA NA NA NA NA NA NA NA ...
+##  $ empleadores_hombres                    : num [1:1127] NA NA NA NA NA NA NA NA NA NA ...
+##  $ empleo_agricultura_mujeres             : num [1:1127] NA NA NA NA NA NA NA NA NA NA ...
+##  $ empleo_agricultura_hombres             : num [1:1127] NA NA NA NA NA NA NA NA NA NA ...
+##  $ empleo_industria_mujeres               : num [1:1127] NA NA NA NA NA NA NA NA NA NA ...
+##  $ empleo_industria_hombres               : num [1:1127] NA NA NA NA NA NA NA NA NA NA ...
+##  $ empleo_servicios_mujeres               : num [1:1127] NA NA NA NA NA NA NA NA NA NA ...
+##  $ empleo_servicios_hombres               : num [1:1127] NA NA NA NA NA NA NA NA NA NA ...
+##  $ empleo_informal_mujeres                : num [1:1127] NA NA NA NA NA NA NA NA NA NA ...
+##  $ empleo_informal_hombres                : num [1:1127] NA NA NA NA NA NA NA NA NA NA ...
+##  $ legislacion_acoso_sexual               : num [1:1127] NA NA NA NA NA NA NA NA NA NA ...
+##  $ autoempleo_mujeres                     : num [1:1127] NA NA NA NA NA NA NA NA NA NA ...
+##  $ autoempleo_hombres                     : num [1:1127] NA NA NA NA NA NA NA NA NA NA ...
+##  $ empleo_parcial_mujeres                 : num [1:1127] NA NA NA NA NA NA NA NA NA NA ...
+##  $ desempleo_educacion_mujeres            : num [1:1127] NA NA NA NA NA NA NA NA NA NA ...
+##  $ desempleo_educacion_hombres            : num [1:1127] NA NA NA NA NA NA NA NA NA NA ...
+##  $ desempleo_mujeres                      : num [1:1127] NA NA NA NA NA NA NA NA NA NA ...
+##  $ desempleo_hombres                      : num [1:1127] NA NA NA NA NA NA NA NA NA NA ...
+##  $ trabajo_domestico_no_remunerado_mujeres: num [1:1127] NA NA NA NA NA NA NA NA NA NA ...
+##  $ trabajo_domestico_no_remunerado_hombres: num [1:1127] NA NA NA NA NA NA NA NA NA NA ...</code></pre>
+<p>La tabla tiene 1127 observaciones y 23 variables:</p>
 </div>
 <div id="hipótesis" class="section level2">
 <h2>Hipótesis</h2>
