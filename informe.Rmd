@@ -7,6 +7,7 @@ output: html_document
 En el presente informe se utilizan datos sobre empleo- desempleo y género provenientes del Banco Mundial. 
 Se analizan variables relacionadas con la participación de mujeres y hombres en el empleo en distintas ramas de actividad, desempleo, autoempleo, empleadores, trabajo doméstico no remunerado. 
 También incluye el dato de la existencia o no de legislación contra el acoso sexual. Los datos son de algunos países de Latinoamérica y el Caribe, para los años que van desde 1970 hasta 2018.(aunque no hay datos de todos los países ni de todos los años)
+A partir de los datos nos haremos preguntas que permitan visualizar las brechas de genero que existen en el empleo y formular posibles hipótesis alrespecto, entendiendo que al ser una base de datos construida en términos binarios (varones/mujeres) obtendremos respuestas acotadas a dicha población y no generalizables al conjunto, al no encontrarse representadas otras identidades de genero existentes.
 
 
 ```{r setup, include=FALSE}
