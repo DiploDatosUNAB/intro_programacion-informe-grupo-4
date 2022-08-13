@@ -33,7 +33,7 @@ Por favor, no incluyan ningún código extraño o que produzca mensajes de error
 
 ### Datos
 
-Guardá los datos en la carpeta "datos" (salvo que uses datos que vienen en algún paquete).
+Guardá los datos en la carpeta "datos" (salvo que uses datos que vienen en algún paquete ).
 
 Si los datos son demasiado pesados para GitHub (que tiene un límite de 100Mb por archivo), comenten en el campus y vemos cómo hacer para que el código funcione igual.
 

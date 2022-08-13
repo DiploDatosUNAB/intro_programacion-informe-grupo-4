@@ -25,43 +25,37 @@ empleo_genero <- read_csv("datos/empleo_genero.csv")
 ```
 
 ```{r}
-empleo_latin <- pivot_longer(empleo_genero, cols=4:52, names_to = "Anio")
+empleo_genero_largo <- pivot_longer(empleo_genero, cols=4:52, names_to = "Anio", values_to = "Valor")
 ```
+```{r}
+empleo_genero_largo
+```
+
 
 ```{r}
-empleo_genero_ordenado <- pivot_wider(empleo_latin, names_from = variable,
-values_from = value)
+empleo_genero_ordenado <- pivot_wider(empleo_genero_largo, 
+                                      names_from = variable,
+                                      values_from = Valor, 
+                                      values_fill = 0)
 ```
-
-
 
 ```{r}
 empleo_genero_ordenado
 ```
 
-
-
-
-
-
-
 ```{r}
-str(empleo_genero_ordenado)
-```
-La tabla tiene 1127 observaciones y 23 variables: 
-
-
-```{r}
-empleo_argentina <- filter(empleo_genero_ordenado, pais_region == Argentina)
+empleo_genero_ordenado|>
+  glimpse()
 ```
 
-```{r}
-empleo_argentina
-```
+La tabla tiene 1127 observaciones y 23 variables.
 
-```{r}
-summarise(empleo_argentina,)
-```
+# Porcentaje del día utilizado por mujeres en trabajo no remunerado doméstico y de cuidado
+
+
+
+
+
 
 
 ## Hipótesis
