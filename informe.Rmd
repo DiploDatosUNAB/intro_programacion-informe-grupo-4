@@ -1,18 +1,21 @@
 ---
-title: "Encuesta Permanente de Hogares - Género"
+title: "Empleo y Género"
 author: "Maria Florencia Aguilera y Rocío Ospitaleche"
 output: html_document
 ---
+
 ## Introducción
+
 En el presente informe se utilizan datos sobre empleo- desempleo y género provenientes del Banco Mundial. 
 Se analizan variables relacionadas con la participación de mujeres y hombres en el empleo en distintas ramas de actividad, desempleo, autoempleo, empleadores, trabajo doméstico no remunerado. 
-También incluye el dato de la existencia o no de legislación contra el acoso sexual. Los datos son de algunos países de Latinoamérica y el Caribe, para los años que van desde 1970 hasta 2018.(aunque no hay datos de todos los países ni de todos los años)
-A partir de los datos nos haremos preguntas que permitan visualizar las brechas de genero que existen en el empleo y formular posibles hipótesis alrespecto, entendiendo que al ser una base de datos construida en términos binarios (varones/mujeres) obtendremos respuestas acotadas a dicha población y no generalizables al conjunto, al no encontrarse representadas otras identidades de genero existentes.
+También incluye el dato de la existencia o no en algunos países de legislación contra el acoso sexual en el ámbito laboral. 
+Los datos existentes en la tabla original corresponden a algunos países de Latinoamérica, el Caribe, España y a nivel mundial, para los años que van desde 1970 hasta 2018 (aunque no hay datos de todos los países ni de todos los años).
+A partir de estos datos nos haremos preguntas que permitan visualizar las brechas de genero que existen en el empleo y formular posibles hipótesis al respecto, entendiendo que al ser una base de datos construida en términos binarios (varones/mujeres) obtendremos respuestas acotadas a dicha población y no generalizables al conjunto, al no encontrarse representadas otras identidades de género existentes.
 
+Fuente de los datos: Extraídos y traducidos del sitio web del [Banco Mundial](https://databank.worldbank.org/source/gender-statistics). 
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-library(eph)
 library(tidyr)
 library(readr)
 library(dplyr)
@@ -20,44 +23,124 @@ library(dplyr)
 
 ## Exploración de los datos
 
+Para leer los datos utilizamos la función "read_csv" y los asignamos a la variable "empleo_genero":
+
 ```{r}
 empleo_genero <- read_csv("datos/empleo_genero.csv")
 ```
+Para ordenar los datos de la tabla utilizamos la función "pivot_longer". De esta forma, los datos de los años que aparecían como nombres de distintas columnas se agrupan dentro de una sola columna bajo el nombre "Anio". Y asignamos la nueva tabla a la variable "empleo_genero_largo" 
 
 ```{r}
 empleo_genero_largo <- pivot_longer(empleo_genero, cols=4:52, names_to = "Anio", values_to = "Valor")
 ```
+
 ```{r}
 empleo_genero_largo
 ```
 
+Luego utilizamos la función "pivot_wider" para reordenar las variables que aparecían en la primera columna bajo la etiqueta "variable" y las ubicamos en distintas columnas. Y asignamos la nueva tabla a la variable "empleo_genero_ordenado", que es con la que vamos a trabajar.
 
 ```{r}
 empleo_genero_ordenado <- pivot_wider(empleo_genero_largo, 
                                       names_from = variable,
-                                      values_from = Valor, 
-                                      values_fill = 0)
+                                      values_from = Valor)
 ```
 
 ```{r}
 empleo_genero_ordenado
 ```
+Para contar la cantidad de variables y de casos que hay en la tabla utilizamos la siguiente función:
 
 ```{r}
-empleo_genero_ordenado|>
-  glimpse()
+glimpse(empleo_genero_ordenado)
 ```
 
-La tabla tiene 1127 observaciones y 23 variables.
-
-# Porcentaje del día utilizado por mujeres en trabajo no remunerado doméstico y de cuidado
+Una vez ordenados los datos, la tabla tiene 1127 observaciones y 23 variables.
 
 
+Seleccionamos los datos de los países latinoamericanos y del Caribe y excluimos los datos etiquetados como "España", "Latin America & Caribbean" y "Mundo" y los agrupamos por año (Anio). 
+Para eso, utilizamos la función "filter" y "group_by:
+
+```{r}
+empleo_genero_ordenado|> filter(pais_region !="Latin America & Caribbean" & pais_region != "Mundo" & pais_region != "EspaÃ±a")|> 
+                      group_by(Anio)
+                        
+```
+Podemos ver que, si agrupamos los datos por año, hay 49 grupos.    
+
+Hacemos la misma operación pero filtrando por "pais_region":
+
+```{r}
+empleo_genero_ordenado|> filter(pais_region !="Latin America & Caribbean" & pais_region != "Mundo" & pais_region != "EspaÃ±a")|> 
+                      group_by(pais_region)
+```
+
+Podemos ver que si agrupamos por países, hay 21 grupos.
+
+A continuación seleccionamos algunas variables para calcular su valor medio, desvío estándard y rango. Elegimos calcular estos datos para el año 2018 (usando la función "filter")
+
+### Variables:
+
+#### * Porcentaje de mujeres con rol de empleadoras, dentro del total de la fuerza laboral femenina (Año 2018)
+
+```{r}
+empleo_genero_ordenado|> filter(pais_region !="Latin America & Caribbean" & pais_region != "Mundo" & pais_region != "EspaÃ±a" & Anio == 2018)|> 
+                    summarise(empleadoras_promedio = mean(empleadoras_mujeres),
+                              empleadoras_sd = sd(empleadoras_mujeres),
+                              empleadoras_rango = range(empleadoras_mujeres))
+```
+
+#### * Porcentaje de hombres con rol de empleadores, dentro del total de la fuerza laboral masculina (Año 2018)
+
+```{r}
+empleo_genero_ordenado|> filter(pais_region !="Latin America & Caribbean" & pais_region != "Mundo" & pais_region != "EspaÃ±a" & Anio == 2018)|> 
+                    summarise(empleadores_promedio = mean(empleadores_hombres),
+                              empleadores_sd = sd(empleadores_hombres),
+                              empleadores_rango = range(empleadores_hombres))
+```
+
+* En los países de América Latina y el Caribe en el año 2018, el promedio del porcentaje de mujeres dentro de la fuerza laboral femenina que tienen rol de empleadoras es de 2,41, con un desvío estándar de 1,02 (valor máx: 5,72 y valor mín: 0,72). Mientras que el promedio del porcentaje de hombres dentro de la fuerza laboral masculina con rol de empleadores es de 5,34 con un desvío estándar de 2,64 (valor máx: 14,96 y valor mín: 1,62).
 
 
+#### * Porcentaje de mujeres trabajadoras por cuenta propia, dentro del total de la fuerza laboral femenina (Año 2018)
 
 
+```{r}
+empleo_genero_ordenado|> filter(pais_region !="Latin America & Caribbean" & pais_region != "Mundo" & pais_region != "EspaÃ±a" & Anio == 2018)|> 
+                summarise(autoempleo_mujeres_prom = mean(autoempleo_mujeres),
+                          autoempleo_mujeres_sd = sd(autoempleo_mujeres),
+                          autoempleo_mujeres_rango = range(autoempleo_mujeres))
+```
 
-## Hipótesis
+
+#### * Porcentaje de hombres trabajadores por cuenta propia, dentro del total de la fuerza laboral masculina (Año 2018)
+
+```{r}
+empleo_genero_ordenado|> filter(pais_region !="Latin America & Caribbean" & pais_region != "Mundo" & pais_region != "EspaÃ±a" & Anio == 2018)|> 
+                summarise(autoempleo_hombres_prom = mean(autoempleo_hombres),
+                          autoempleo_hombres_sd = sd(autoempleo_hombres),
+                          autoempleo_hombres_rango = range(autoempleo_hombres))
+```
+
+* En los países de América Latina y el Caribe en el año 2018, el promedio del porcentaje de mujeres dentro de la fuerza laboral femenina trabajadoras por cuenta propia es de 30,00 con un desvío estándar de 16,40 (valor máx: 84,92 y valor mín: 5,49). Mientras que el promedio del porcentaje de hombres dentro de la fuerza laboral masculina trabajadores por cuenta propia es de 30,61 con un desvío estándar de 15,24 (valor máx: 80,95 y valor mín: 8,38).
 
 
+### Hipótesis
+
+Los datos de la tabla tienen muchas variables que pueden cruzarse con el objetivo de responder preguntas interesantes. 
+
+Por ejemplo, podríamos relacionar empleo a tiempo parcial de las mujeres con el trabajo doméstico no remunerado:
+
+*¿Existe una relación entre la cantidad de horas que dedican las mujeres al trabajo doméstico y de cuidado no remunerado y la cantidad de horas que dedican al empleo remunerado, expresado este por el porcentaje de la fuerza de trabajo femenina que tiene empleos a tiempo parcial?
+
+Otro ejemplo podría ser cruzar trabajo doméstico y de cuidado no remunerado con informalidad o autoempleo.
+
+*¿Existe una relación entre la cantidad de tiempo dedicado al trabajo doméstico y de cuidado no remunerado y la cantidad de empleos informales? (teniendo en cuenta que estos tienen muchas veces mas flexibilidades para conciliar la vida laboral y familiar).
+
+Otras preguntas interesantes que se podrían responder cruzando la variable "Año" con otras variables son:
+
+*¿Cómo fue la evolución del empleo en Latinoamérica y el Caribe desde 1970 hasta 2018? ¿Aumentó la participación de la mujer en el trabajo remunerado? ¿Aumentó la cantidad de tiempo que dedican los hombres al trabajo doméstico y de cuidado no remunerado? ¿Aumentó dentro de la fuerza laboral femenina la cantidad de mujeres que tienen rol de empleadoras? 
+
+Por último, sería interesante cruzar la variable "Legislacion_acoso_sexual" con las distintas variables de empleo femenino.
+
+*¿Hay una relación entre la existencia de legislación laboral contra el acoso sexual en el ámbito laboral con la participación de la mujer en el empleo formal?

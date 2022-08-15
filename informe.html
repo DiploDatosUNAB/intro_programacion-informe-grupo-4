@@ -12,7 +12,7 @@
 <meta name="author" content="Maria Florencia Aguilera y Rocío Ospitaleche" />
 
 
-<title>Encuesta Permanente de Hogares - Género</title>
+<title>Empleo y Género</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -362,8 +362,7 @@ pre code {
 
 
 
-<h1 class="title toc-ignore">Encuesta Permanente de Hogares -
-Género</h1>
+<h1 class="title toc-ignore">Empleo y Género</h1>
 <h4 class="author">Maria Florencia Aguilera y Rocío Ospitaleche</h4>
 
 </div>
@@ -376,18 +375,24 @@ género provenientes del Banco Mundial. Se analizan variables
 relacionadas con la participación de mujeres y hombres en el empleo en
 distintas ramas de actividad, desempleo, autoempleo, empleadores,
 trabajo doméstico no remunerado. También incluye el dato de la
-existencia o no de legislación contra el acoso sexual. Los datos son de
-algunos países de Latinoamérica y el Caribe, para los años que van desde
-1970 hasta 2018.(aunque no hay datos de todos los países ni de todos los
-años) A partir de los datos nos haremos preguntas que permitan
-visualizar las brechas de genero que existen en el empleo y formular
-posibles hipótesis alrespecto, entendiendo que al ser una base de datos
-construida en términos binarios (varones/mujeres) obtendremos respuestas
-acotadas a dicha población y no generalizables al conjunto, al no
-encontrarse representadas otras identidades de genero existentes.</p>
+existencia o no en algunos países de legislación contra el acoso sexual
+en el ámbito laboral. Los datos existentes en la tabla original
+corresponden a algunos países de Latinoamérica, el Caribe, España y a
+nivel mundial, para los años que van desde 1970 hasta 2018 (aunque no
+hay datos de todos los países ni de todos los años). A partir de estos
+datos nos haremos preguntas que permitan visualizar las brechas de
+genero que existen en el empleo y formular posibles hipótesis al
+respecto, entendiendo que al ser una base de datos construida en
+términos binarios (varones/mujeres) obtendremos respuestas acotadas a
+dicha población y no generalizables al conjunto, al no encontrarse
+representadas otras identidades de género existentes.</p>
+<p>Fuente de los datos: Extraídos y traducidos del sitio web del <a href="https://databank.worldbank.org/source/gender-statistics">Banco
+Mundial</a>.</p>
 </div>
 <div id="exploración-de-los-datos" class="section level2">
 <h2>Exploración de los datos</h2>
+<p>Para leer los datos utilizamos la función “read_csv” y los asignamos
+a la variable “empleo_genero”:</p>
 <pre class="r"><code>empleo_genero &lt;- read_csv(&quot;datos/empleo_genero.csv&quot;)</code></pre>
 <pre><code>## Rows: 460 Columns: 52
 ## ── Column specification ────────────────────────────────────────────────────────
@@ -397,6 +402,11 @@ encontrarse representadas otras identidades de genero existentes.</p>
 ## 
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
 ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<p>Para ordenar los datos de la tabla utilizamos la función
+“pivot_longer”. De esta forma, los datos de los años que aparecían como
+nombres de distintas columnas se agrupan dentro de una sola columna bajo
+el nombre “Anio”. Y asignamos la nueva tabla a la variable
+“empleo_genero_largo”</p>
 <pre class="r"><code>empleo_genero_largo &lt;- pivot_longer(empleo_genero, cols=4:52, names_to = &quot;Anio&quot;, values_to = &quot;Valor&quot;)</code></pre>
 <pre class="r"><code>empleo_genero_largo</code></pre>
 <pre><code>## # A tibble: 22,540 × 5
@@ -413,10 +423,14 @@ encontrarse representadas otras identidades de genero existentes.</p>
 ##  9 empleadoras_mujeres Argentina   ARG                1978     NA
 ## 10 empleadoras_mujeres Argentina   ARG                1979     NA
 ## # … with 22,530 more rows</code></pre>
+<p>Luego utilizamos la función “pivot_wider” para reordenar las
+variables que aparecían en la primera columna bajo la etiqueta
+“variable” y las ubicamos en distintas columnas. Y asignamos la nueva
+tabla a la variable “empleo_genero_ordenado”, que es con la que vamos a
+trabajar.</p>
 <pre class="r"><code>empleo_genero_ordenado &lt;- pivot_wider(empleo_genero_largo, 
                                       names_from = variable,
-                                      values_from = Valor, 
-                                      values_fill = 0)</code></pre>
+                                      values_from = Valor)</code></pre>
 <pre class="r"><code>empleo_genero_ordenado</code></pre>
 <pre><code>## # A tibble: 1,127 × 23
 ##    pais_region codigo_pais_region Anio  empleadoras_mujeres empleadores_hombres
@@ -438,8 +452,9 @@ encontrarse representadas otras identidades de genero existentes.</p>
 ## #   empleo_informal_mujeres &lt;dbl&gt;, empleo_informal_hombres &lt;dbl&gt;,
 ## #   legislacion_acoso_sexual &lt;dbl&gt;, autoempleo_mujeres &lt;dbl&gt;,
 ## #   autoempleo_hombres &lt;dbl&gt;, empleo_parcial_mujeres &lt;dbl&gt;, …</code></pre>
-<pre class="r"><code>empleo_genero_ordenado|&gt;
-  glimpse()</code></pre>
+<p>Para contar la cantidad de variables y de casos que hay en la tabla
+utilizamos la siguiente función:</p>
+<pre class="r"><code>glimpse(empleo_genero_ordenado)</code></pre>
 <pre><code>## Rows: 1,127
 ## Columns: 23
 ## $ pais_region                             &lt;chr&gt; &quot;Argentina&quot;, &quot;Argentina&quot;, &quot;Arg…
@@ -465,13 +480,167 @@ encontrarse representadas otras identidades de genero existentes.</p>
 ## $ desempleo_hombres                       &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA…
 ## $ trabajo_domestico_no_remunerado_mujeres &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA…
 ## $ trabajo_domestico_no_remunerado_hombres &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA…</code></pre>
-<p>La tabla tiene 1127 observaciones y 23 variables.</p>
+<p>Una vez ordenados los datos, la tabla tiene 1127 observaciones y 23
+variables.</p>
+<p>Seleccionamos los datos de los países latinoamericanos y del Caribe y
+excluimos los datos etiquetados como “España”, “Latin America &amp;
+Caribbean” y “Mundo” y los agrupamos por año (Anio). Para eso,
+utilizamos la función “filter” y “group_by:</p>
+<pre class="r"><code>empleo_genero_ordenado|&gt; filter(pais_region !=&quot;Latin America &amp; Caribbean&quot; &amp; pais_region != &quot;Mundo&quot; &amp; pais_region != &quot;EspaÃ±a&quot;)|&gt; 
+                      group_by(Anio)</code></pre>
+<pre><code>## # A tibble: 1,029 × 23
+## # Groups:   Anio [49]
+##    pais_region codigo_pais_region Anio  empleadoras_mujeres empleadores_hombres
+##    &lt;chr&gt;       &lt;chr&gt;              &lt;chr&gt;               &lt;dbl&gt;               &lt;dbl&gt;
+##  1 Argentina   ARG                1970                   NA                  NA
+##  2 Argentina   ARG                1971                   NA                  NA
+##  3 Argentina   ARG                1972                   NA                  NA
+##  4 Argentina   ARG                1973                   NA                  NA
+##  5 Argentina   ARG                1974                   NA                  NA
+##  6 Argentina   ARG                1975                   NA                  NA
+##  7 Argentina   ARG                1976                   NA                  NA
+##  8 Argentina   ARG                1977                   NA                  NA
+##  9 Argentina   ARG                1978                   NA                  NA
+## 10 Argentina   ARG                1979                   NA                  NA
+## # … with 1,019 more rows, and 18 more variables:
+## #   empleo_agricultura_mujeres &lt;dbl&gt;, empleo_agricultura_hombres &lt;dbl&gt;,
+## #   empleo_industria_mujeres &lt;dbl&gt;, empleo_industria_hombres &lt;dbl&gt;,
+## #   empleo_servicios_mujeres &lt;dbl&gt;, empleo_servicios_hombres &lt;dbl&gt;,
+## #   empleo_informal_mujeres &lt;dbl&gt;, empleo_informal_hombres &lt;dbl&gt;,
+## #   legislacion_acoso_sexual &lt;dbl&gt;, autoempleo_mujeres &lt;dbl&gt;,
+## #   autoempleo_hombres &lt;dbl&gt;, empleo_parcial_mujeres &lt;dbl&gt;, …</code></pre>
+<p>Podemos ver que, si agrupamos los datos por año, hay 49 grupos.</p>
+<p>Hacemos la misma operación pero filtrando por “pais_region”:</p>
+<pre class="r"><code>empleo_genero_ordenado|&gt; filter(pais_region !=&quot;Latin America &amp; Caribbean&quot; &amp; pais_region != &quot;Mundo&quot; &amp; pais_region != &quot;EspaÃ±a&quot;)|&gt; 
+                      group_by(pais_region)</code></pre>
+<pre><code>## # A tibble: 1,029 × 23
+## # Groups:   pais_region [21]
+##    pais_region codigo_pais_region Anio  empleadoras_mujeres empleadores_hombres
+##    &lt;chr&gt;       &lt;chr&gt;              &lt;chr&gt;               &lt;dbl&gt;               &lt;dbl&gt;
+##  1 Argentina   ARG                1970                   NA                  NA
+##  2 Argentina   ARG                1971                   NA                  NA
+##  3 Argentina   ARG                1972                   NA                  NA
+##  4 Argentina   ARG                1973                   NA                  NA
+##  5 Argentina   ARG                1974                   NA                  NA
+##  6 Argentina   ARG                1975                   NA                  NA
+##  7 Argentina   ARG                1976                   NA                  NA
+##  8 Argentina   ARG                1977                   NA                  NA
+##  9 Argentina   ARG                1978                   NA                  NA
+## 10 Argentina   ARG                1979                   NA                  NA
+## # … with 1,019 more rows, and 18 more variables:
+## #   empleo_agricultura_mujeres &lt;dbl&gt;, empleo_agricultura_hombres &lt;dbl&gt;,
+## #   empleo_industria_mujeres &lt;dbl&gt;, empleo_industria_hombres &lt;dbl&gt;,
+## #   empleo_servicios_mujeres &lt;dbl&gt;, empleo_servicios_hombres &lt;dbl&gt;,
+## #   empleo_informal_mujeres &lt;dbl&gt;, empleo_informal_hombres &lt;dbl&gt;,
+## #   legislacion_acoso_sexual &lt;dbl&gt;, autoempleo_mujeres &lt;dbl&gt;,
+## #   autoempleo_hombres &lt;dbl&gt;, empleo_parcial_mujeres &lt;dbl&gt;, …</code></pre>
+<p>Podemos ver que si agrupamos por países, hay 21 grupos.</p>
+<p>A continuación seleccionamos algunas variables para calcular su valor
+medio, desvío estándard y rango. Elegimos calcular estos datos para el
+año 2018 (usando la función “filter”)</p>
+<div id="variables" class="section level3">
+<h3>Variables:</h3>
+<div id="porcentaje-de-mujeres-con-rol-de-empleadoras-dentro-del-total-de-la-fuerza-laboral-femenina-año-2018" class="section level4">
+<h4>* Porcentaje de mujeres con rol de empleadoras, dentro del total de
+la fuerza laboral femenina (Año 2018)</h4>
+<pre class="r"><code>empleo_genero_ordenado|&gt; filter(pais_region !=&quot;Latin America &amp; Caribbean&quot; &amp; pais_region != &quot;Mundo&quot; &amp; pais_region != &quot;EspaÃ±a&quot; &amp; Anio == 2018)|&gt; 
+                    summarise(empleadoras_promedio = mean(empleadoras_mujeres),
+                              empleadoras_sd = sd(empleadoras_mujeres),
+                              empleadoras_rango = range(empleadoras_mujeres))</code></pre>
+<pre><code>## # A tibble: 2 × 3
+##   empleadoras_promedio empleadoras_sd empleadoras_rango
+##                  &lt;dbl&gt;          &lt;dbl&gt;             &lt;dbl&gt;
+## 1                 2.42           1.02             0.720
+## 2                 2.42           1.02             5.72</code></pre>
 </div>
-<div id="porcentaje-del-día-utilizado-por-mujeres-en-trabajo-no-remunerado-doméstico-y-de-cuidado" class="section level1">
-<h1>Porcentaje del día utilizado por mujeres en trabajo no remunerado
-doméstico y de cuidado</h1>
-<div id="hipótesis" class="section level2">
-<h2>Hipótesis</h2>
+<div id="porcentaje-de-hombres-con-rol-de-empleadores-dentro-del-total-de-la-fuerza-laboral-masculina-año-2018" class="section level4">
+<h4>* Porcentaje de hombres con rol de empleadores, dentro del total de
+la fuerza laboral masculina (Año 2018)</h4>
+<pre class="r"><code>empleo_genero_ordenado|&gt; filter(pais_region !=&quot;Latin America &amp; Caribbean&quot; &amp; pais_region != &quot;Mundo&quot; &amp; pais_region != &quot;EspaÃ±a&quot; &amp; Anio == 2018)|&gt; 
+                    summarise(empleadores_promedio = mean(empleadores_hombres),
+                              empleadores_sd = sd(empleadores_hombres),
+                              empleadores_rango = range(empleadores_hombres))</code></pre>
+<pre><code>## # A tibble: 2 × 3
+##   empleadores_promedio empleadores_sd empleadores_rango
+##                  &lt;dbl&gt;          &lt;dbl&gt;             &lt;dbl&gt;
+## 1                 5.35           2.65              1.62
+## 2                 5.35           2.65             15.0</code></pre>
+<ul>
+<li>En los países de América Latina y el Caribe en el año 2018, el
+promedio del porcentaje de mujeres dentro de la fuerza laboral femenina
+que tienen rol de empleadoras es de 2,41, con un desvío estándar de 1,02
+(valor máx: 5,72 y valor mín: 0,72). Mientras que el promedio del
+porcentaje de hombres dentro de la fuerza laboral masculina con rol de
+empleadores es de 5,34 con un desvío estándar de 2,64 (valor máx: 14,96
+y valor mín: 1,62).</li>
+</ul>
+</div>
+<div id="porcentaje-de-mujeres-trabajadoras-por-cuenta-propia-dentro-del-total-de-la-fuerza-laboral-femenina-año-2018" class="section level4">
+<h4>* Porcentaje de mujeres trabajadoras por cuenta propia, dentro del
+total de la fuerza laboral femenina (Año 2018)</h4>
+<pre class="r"><code>empleo_genero_ordenado|&gt; filter(pais_region !=&quot;Latin America &amp; Caribbean&quot; &amp; pais_region != &quot;Mundo&quot; &amp; pais_region != &quot;EspaÃ±a&quot; &amp; Anio == 2018)|&gt; 
+                summarise(autoempleo_mujeres_prom = mean(autoempleo_mujeres),
+                          autoempleo_mujeres_sd = sd(autoempleo_mujeres),
+                          autoempleo_mujeres_rango = range(autoempleo_mujeres))</code></pre>
+<pre><code>## # A tibble: 2 × 3
+##   autoempleo_mujeres_prom autoempleo_mujeres_sd autoempleo_mujeres_rango
+##                     &lt;dbl&gt;                 &lt;dbl&gt;                    &lt;dbl&gt;
+## 1                    30.0                  16.4                     5.49
+## 2                    30.0                  16.4                    84.9</code></pre>
+</div>
+<div id="porcentaje-de-hombres-trabajadores-por-cuenta-propia-dentro-del-total-de-la-fuerza-laboral-masculina-año-2018" class="section level4">
+<h4>* Porcentaje de hombres trabajadores por cuenta propia, dentro del
+total de la fuerza laboral masculina (Año 2018)</h4>
+<pre class="r"><code>empleo_genero_ordenado|&gt; filter(pais_region !=&quot;Latin America &amp; Caribbean&quot; &amp; pais_region != &quot;Mundo&quot; &amp; pais_region != &quot;EspaÃ±a&quot; &amp; Anio == 2018)|&gt; 
+                summarise(autoempleo_hombres_prom = mean(autoempleo_hombres),
+                          autoempleo_hombres_sd = sd(autoempleo_hombres),
+                          autoempleo_hombres_rango = range(autoempleo_hombres))</code></pre>
+<pre><code>## # A tibble: 2 × 3
+##   autoempleo_hombres_prom autoempleo_hombres_sd autoempleo_hombres_rango
+##                     &lt;dbl&gt;                 &lt;dbl&gt;                    &lt;dbl&gt;
+## 1                    30.6                  15.2                     8.38
+## 2                    30.6                  15.2                    81.0</code></pre>
+<ul>
+<li>En los países de América Latina y el Caribe en el año 2018, el
+promedio del porcentaje de mujeres dentro de la fuerza laboral femenina
+trabajadoras por cuenta propia es de 30,00 con un desvío estándar de
+16,40 (valor máx: 84,92 y valor mín: 5,49). Mientras que el promedio del
+porcentaje de hombres dentro de la fuerza laboral masculina trabajadores
+por cuenta propia es de 30,61 con un desvío estándar de 15,24 (valor
+máx: 80,95 y valor mín: 8,38).</li>
+</ul>
+</div>
+</div>
+<div id="hipótesis" class="section level3">
+<h3>Hipótesis</h3>
+<p>Los datos de la tabla tienen muchas variables que pueden cruzarse con
+el objetivo de responder preguntas interesantes.</p>
+<p>Por ejemplo, podríamos relacionar empleo a tiempo parcial de las
+mujeres con el trabajo doméstico no remunerado:</p>
+<p>*¿Existe una relación entre la cantidad de horas que dedican las
+mujeres al trabajo doméstico y de cuidado no remunerado y la cantidad de
+horas que dedican al empleo remunerado, expresado este por el porcentaje
+de la fuerza de trabajo femenina que tiene empleos a tiempo parcial?</p>
+<p>Otro ejemplo podría ser cruzar trabajo doméstico y de cuidado no
+remunerado con informalidad o autoempleo.</p>
+<p>*¿Existe una relación entre la cantidad de tiempo dedicado al trabajo
+doméstico y de cuidado no remunerado y la cantidad de empleos
+informales? (teniendo en cuenta que estos tienen muchas veces mas
+flexibilidades para conciliar la vida laboral y familiar).</p>
+<p>Otras preguntas interesantes que se podrían responder cruzando la
+variable “Año” con otras variables son:</p>
+<p>*¿Cómo fue la evolución del empleo en Latinoamérica y el Caribe desde
+1970 hasta 2018? ¿Aumentó la participación de la mujer en el trabajo
+remunerado? ¿Aumentó la cantidad de tiempo que dedican los hombres al
+trabajo doméstico y de cuidado no remunerado? ¿Aumentó dentro de la
+fuerza laboral femenina la cantidad de mujeres que tienen rol de
+empleadoras?</p>
+<p>Por último, sería interesante cruzar la variable
+“Legislacion_acoso_sexual” con las distintas variables de empleo
+femenino.</p>
+<p>*¿Hay una relación entre la existencia de legislación laboral contra
+el acoso sexual en el ámbito laboral con la participación de la mujer en
+el empleo formal?</p>
 </div>
 </div>
 
