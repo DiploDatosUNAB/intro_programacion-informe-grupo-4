@@ -137,3 +137,8 @@ Otras preguntas interesantes que se podrían responder cruzando la variable "Añ
 Por último, sería interesante cruzar la variable "Legislacion_acoso_sexual" con las distintas variables de empleo femenino.
 
 \*¿Hay una relación entre la existencia de legislación laboral contra el acoso sexual en el ámbito laboral con la participación de la mujer en el empleo formal?
+
+##Analisis
+
+\*A continuación, nos porponemos responder y graficar algunas de las preguntas formuladas y llegar a una conclusión a traves del analisis de los datos.
+
