@@ -138,7 +138,24 @@ Por último, sería interesante cruzar la variable "Legislacion_acoso_sexual" co
 
 \*¿Hay una relación entre la existencia de legislación laboral contra el acoso sexual en el ámbito laboral con la participación de la mujer en el empleo formal?
 
+##prueba
+
+```{r}
+empleo_genero_largo |> 
+  filter(pais_region !="Latin America & Caribbean" & pais_region != "Mundo" & pais_region != "EspaÃ±a" & Anio == 2018) |> 
+  filter(startsWith(variable, "empleador")) |>   
+  separate(variable, into = c("tipo", "sexo"), sep = "_") |>  
+  group_by(sexo) 
+```
+ 
+
 ##Analisis
 
 \*A continuación, nos porponemos responder y graficar algunas de las preguntas formuladas y llegar a una conclusión a traves del analisis de los datos.
+
+
+
+
+
+
 
