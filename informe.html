@@ -550,12 +550,12 @@ la fuerza laboral femenina (Año 2018)</h4>
 <pre class="r"><code>empleo_genero_ordenado|&gt; filter(pais_region !=&quot;Latin America &amp; Caribbean&quot; &amp; pais_region != &quot;Mundo&quot; &amp; pais_region != &quot;EspaÃ±a&quot; &amp; Anio == 2018)|&gt; 
                     summarise(empleadoras_promedio = mean(empleadoras_mujeres),
                               empleadoras_sd = sd(empleadoras_mujeres),
-                              empleadoras_rango = range(empleadoras_mujeres))</code></pre>
-<pre><code>## # A tibble: 2 × 3
-##   empleadoras_promedio empleadoras_sd empleadoras_rango
-##                  &lt;dbl&gt;          &lt;dbl&gt;             &lt;dbl&gt;
-## 1                 2.42           1.02             0.720
-## 2                 2.42           1.02             5.72</code></pre>
+                              empleadoras_min = min(empleadoras_mujeres),
+                              empleadoras_max = max(empleadoras_mujeres))</code></pre>
+<pre><code>## # A tibble: 1 × 4
+##   empleadoras_promedio empleadoras_sd empleadoras_min empleadoras_max
+##                  &lt;dbl&gt;          &lt;dbl&gt;           &lt;dbl&gt;           &lt;dbl&gt;
+## 1                 2.42           1.02           0.720            5.72</code></pre>
 </div>
 <div id="porcentaje-de-hombres-con-rol-de-empleadores-dentro-del-total-de-la-fuerza-laboral-masculina-año-2018" class="section level4">
 <h4>* Porcentaje de hombres con rol de empleadores, dentro del total de
@@ -563,12 +563,12 @@ la fuerza laboral masculina (Año 2018)</h4>
 <pre class="r"><code>empleo_genero_ordenado|&gt; filter(pais_region !=&quot;Latin America &amp; Caribbean&quot; &amp; pais_region != &quot;Mundo&quot; &amp; pais_region != &quot;EspaÃ±a&quot; &amp; Anio == 2018)|&gt; 
                     summarise(empleadores_promedio = mean(empleadores_hombres),
                               empleadores_sd = sd(empleadores_hombres),
-                              empleadores_rango = range(empleadores_hombres))</code></pre>
-<pre><code>## # A tibble: 2 × 3
-##   empleadores_promedio empleadores_sd empleadores_rango
-##                  &lt;dbl&gt;          &lt;dbl&gt;             &lt;dbl&gt;
-## 1                 5.35           2.65              1.62
-## 2                 5.35           2.65             15.0</code></pre>
+                              empleadores_min = min(empleadores_hombres),
+                              empleadores_max = max(empleadores_hombres))</code></pre>
+<pre><code>## # A tibble: 1 × 4
+##   empleadores_promedio empleadores_sd empleadores_min empleadores_max
+##                  &lt;dbl&gt;          &lt;dbl&gt;           &lt;dbl&gt;           &lt;dbl&gt;
+## 1                 5.35           2.65            1.62            15.0</code></pre>
 <ul>
 <li>En los países de América Latina y el Caribe en el año 2018, el
 promedio del porcentaje de mujeres dentro de la fuerza laboral femenina
@@ -585,12 +585,12 @@ total de la fuerza laboral femenina (Año 2018)</h4>
 <pre class="r"><code>empleo_genero_ordenado|&gt; filter(pais_region !=&quot;Latin America &amp; Caribbean&quot; &amp; pais_region != &quot;Mundo&quot; &amp; pais_region != &quot;EspaÃ±a&quot; &amp; Anio == 2018)|&gt; 
                 summarise(autoempleo_mujeres_prom = mean(autoempleo_mujeres),
                           autoempleo_mujeres_sd = sd(autoempleo_mujeres),
-                          autoempleo_mujeres_rango = range(autoempleo_mujeres))</code></pre>
-<pre><code>## # A tibble: 2 × 3
-##   autoempleo_mujeres_prom autoempleo_mujeres_sd autoempleo_mujeres_rango
-##                     &lt;dbl&gt;                 &lt;dbl&gt;                    &lt;dbl&gt;
-## 1                    30.0                  16.4                     5.49
-## 2                    30.0                  16.4                    84.9</code></pre>
+                          autoempleo_mujeres_min = min(autoempleo_mujeres),
+                          autoempleo_mujeres_max = max(autoempleo_mujeres))</code></pre>
+<pre><code>## # A tibble: 1 × 4
+##   autoempleo_mujeres_prom autoempleo_mujeres_… autoempleo_muje… autoempleo_muje…
+##                     &lt;dbl&gt;                &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;
+## 1                    30.0                 16.4             5.49             84.9</code></pre>
 </div>
 <div id="porcentaje-de-hombres-trabajadores-por-cuenta-propia-dentro-del-total-de-la-fuerza-laboral-masculina-año-2018" class="section level4">
 <h4>* Porcentaje de hombres trabajadores por cuenta propia, dentro del
@@ -598,12 +598,12 @@ total de la fuerza laboral masculina (Año 2018)</h4>
 <pre class="r"><code>empleo_genero_ordenado|&gt; filter(pais_region !=&quot;Latin America &amp; Caribbean&quot; &amp; pais_region != &quot;Mundo&quot; &amp; pais_region != &quot;EspaÃ±a&quot; &amp; Anio == 2018)|&gt; 
                 summarise(autoempleo_hombres_prom = mean(autoempleo_hombres),
                           autoempleo_hombres_sd = sd(autoempleo_hombres),
-                          autoempleo_hombres_rango = range(autoempleo_hombres))</code></pre>
-<pre><code>## # A tibble: 2 × 3
-##   autoempleo_hombres_prom autoempleo_hombres_sd autoempleo_hombres_rango
-##                     &lt;dbl&gt;                 &lt;dbl&gt;                    &lt;dbl&gt;
-## 1                    30.6                  15.2                     8.38
-## 2                    30.6                  15.2                    81.0</code></pre>
+                          autoempleo_hombres_min = min(autoempleo_hombres),
+                          autoempleo_hombres_max = max(autoempleo_hombres))</code></pre>
+<pre><code>## # A tibble: 1 × 4
+##   autoempleo_hombres_prom autoempleo_hombres_… autoempleo_homb… autoempleo_homb…
+##                     &lt;dbl&gt;                &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;
+## 1                    30.6                 15.2             8.38             81.0</code></pre>
 <ul>
 <li>En los países de América Latina y el Caribe en el año 2018, el
 promedio del porcentaje de mujeres dentro de la fuerza laboral femenina
