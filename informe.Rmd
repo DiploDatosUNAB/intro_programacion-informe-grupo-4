@@ -88,7 +88,8 @@ A continuación seleccionamos algunas variables para calcular su valor medio, de
 empleo_genero_ordenado|> filter(pais_region !="Latin America & Caribbean" & pais_region != "Mundo" & pais_region != "EspaÃ±a" & Anio == 2018)|> 
                     summarise(empleadoras_promedio = mean(empleadoras_mujeres),
                               empleadoras_sd = sd(empleadoras_mujeres),
-                              empleadoras_rango = range(empleadoras_mujeres))
+                              empleadoras_min = min(empleadoras_mujeres),
+                              empleadoras_max = max(empleadoras_mujeres))
 ```
 
 #### \* Porcentaje de hombres con rol de empleadores, dentro del total de la fuerza laboral masculina (Año 2018)
@@ -97,7 +98,8 @@ empleo_genero_ordenado|> filter(pais_region !="Latin America & Caribbean" & pais
 empleo_genero_ordenado|> filter(pais_region !="Latin America & Caribbean" & pais_region != "Mundo" & pais_region != "EspaÃ±a" & Anio == 2018)|> 
                     summarise(empleadores_promedio = mean(empleadores_hombres),
                               empleadores_sd = sd(empleadores_hombres),
-                              empleadores_rango = range(empleadores_hombres))
+                              empleadores_min = min(empleadores_hombres),
+                              empleadores_max = max(empleadores_hombres))
 ```
 
 -   En los países de América Latina y el Caribe en el año 2018, el promedio del porcentaje de mujeres dentro de la fuerza laboral femenina que tienen rol de empleadoras es de 2,41, con un desvío estándar de 1,02 (valor máx: 5,72 y valor mín: 0,72). Mientras que el promedio del porcentaje de hombres dentro de la fuerza laboral masculina con rol de empleadores es de 5,34 con un desvío estándar de 2,64 (valor máx: 14,96 y valor mín: 1,62).
@@ -108,7 +110,8 @@ empleo_genero_ordenado|> filter(pais_region !="Latin America & Caribbean" & pais
 empleo_genero_ordenado|> filter(pais_region !="Latin America & Caribbean" & pais_region != "Mundo" & pais_region != "EspaÃ±a" & Anio == 2018)|> 
                 summarise(autoempleo_mujeres_prom = mean(autoempleo_mujeres),
                           autoempleo_mujeres_sd = sd(autoempleo_mujeres),
-                          autoempleo_mujeres_rango = range(autoempleo_mujeres))
+                          autoempleo_mujeres_min = min(autoempleo_mujeres),
+                          autoempleo_mujeres_max = max(autoempleo_mujeres))
 ```
 
 #### \* Porcentaje de hombres trabajadores por cuenta propia, dentro del total de la fuerza laboral masculina (Año 2018)
@@ -117,7 +120,8 @@ empleo_genero_ordenado|> filter(pais_region !="Latin America & Caribbean" & pais
 empleo_genero_ordenado|> filter(pais_region !="Latin America & Caribbean" & pais_region != "Mundo" & pais_region != "EspaÃ±a" & Anio == 2018)|> 
                 summarise(autoempleo_hombres_prom = mean(autoempleo_hombres),
                           autoempleo_hombres_sd = sd(autoempleo_hombres),
-                          autoempleo_hombres_rango = range(autoempleo_hombres))
+                          autoempleo_hombres_min = min(autoempleo_hombres),
+                          autoempleo_hombres_max = max(autoempleo_hombres))
 ```
 
 -   En los países de América Latina y el Caribe en el año 2018, el promedio del porcentaje de mujeres dentro de la fuerza laboral femenina trabajadoras por cuenta propia es de 30,00 con un desvío estándar de 16,40 (valor máx: 84,92 y valor mín: 5,49). Mientras que el promedio del porcentaje de hombres dentro de la fuerza laboral masculina trabajadores por cuenta propia es de 30,61 con un desvío estándar de 15,24 (valor máx: 80,95 y valor mín: 8,38).
