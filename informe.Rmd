@@ -28,7 +28,10 @@ empleo_genero <- read_csv("datos/empleo_genero.csv")
 Para ordenar los datos de la tabla utilizamos la función "pivot_longer". De esta forma, los datos de los años que aparecían como nombres de distintas columnas se agrupan dentro de una sola columna bajo el nombre "Anio". Y asignamos la nueva tabla a la variable "empleo_genero_largo"
 
 ```{r}
-empleo_genero_largo <- pivot_longer(empleo_genero, cols=4:52, names_to = "Anio", values_to = "Valor")
+empleo_genero_largo <- pivot_longer(empleo_genero, 
+                                    cols=4:52, 
+                                    names_to = "Anio", 
+                                    values_to = "Valor")
 ```
 
 ```{r}
@@ -40,7 +43,8 @@ Luego utilizamos la función "pivot_wider" para reordenar las variables que apar
 ```{r}
 empleo_genero_ordenado <- pivot_wider(empleo_genero_largo, 
                                       names_from = variable,
-                                      values_from = Valor)
+                                      values_from = Valor)|> 
+                          mutate(Anio=as.numeric(Anio))
 ```
 
 ```{r}
