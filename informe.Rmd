@@ -15,6 +15,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyr)
 library(readr)
 library(dplyr)
+library(ggplot2)
 ```
 
 ## Exploración de los datos
@@ -107,7 +108,7 @@ empleo_genero_ordenado|> filter(pais_region !="Latin America & Caribbean" & pais
 #### \* Porcentaje de mujeres trabajadoras por cuenta propia, dentro del total de la fuerza laboral femenina (Año 2018)
 
 ```{r}
-empleo_genero_ordenado|> filter(pais_region !="Latin America & Caribbean" & pais_region != "Mundo" & pais_region != "EspaÃ±a" & Anio == 2018)|> 
+empleo_genero_ordenado|> filter(pais_region !="Latin America & Caribbean" & pais_region != "Mundo" & pais_region != "España" & Anio == 2018)|> 
                 summarise(autoempleo_mujeres_prom = mean(autoempleo_mujeres),
                           autoempleo_mujeres_sd = sd(autoempleo_mujeres),
                           autoempleo_mujeres_min = min(autoempleo_mujeres),
@@ -140,10 +141,20 @@ empleo_genero_ordenado|> filter(pais_region !="Latin America & Caribbean" & pais
 ## Hipótesis 2
 \*¿Se acorto esta brecha en los ultimos 20 años?
 
-\*Para responder a la pregunta, calculamos el promedio para cada uno de los años, de del porcentaje dentro de la fuerza laboral masculina que se encuentra empleado en la industria. Lo mismo hicimos para el caso de las mujeres.
+\*Para responder a la pregunta, calculamos el promedio para cada uno de los años, de del porcentaje dentro de la fuerza laboral masculina de los paises del Mercosur que se encuentra empleado en la industria. Lo mismo hicimos para el caso de las mujeres.
+
+\* Filtré los datos existentes para los paises del mercosur dentro de los años que van de 1998 en adelante.
 
 ```{r}
-promedio_industria_x_anio <- empleo_genero_ordenado |> 
+empleo_mercosur <- empleo_genero_ordenado |> 
+  filter(pais_region == "Argentina" | pais_region == "Uruguay" | pais_region == "Paraguay" | pais_region == "Brasil" | pais_region == "Venezuela") |> 
+  filter (Anio >= 1998)
+```
+
+Calcule el promedio agrupado por año para todos los datos existentes dentro de la variable industria mujeres e industria hombres
+
+```{r}
+promedio_industria_x_anio <- empleo_mercosur |>
   group_by(Anio) |>
   summarise(promedio_industria_hombres = mean(empleo_industria_hombres),
             promedio_industria_mujeres = mean(empleo_industria_mujeres))
@@ -153,6 +164,8 @@ promedio_industria_x_anio <- empleo_genero_ordenado |>
 ```{r}
 library(ggplot2)
 
-ggplot2(data=promedio_industria_x_anio, mapping = aes( x=Anio, y=promedio_industria_hombres))
+ggplot(data=promedio_industria_x_anio, mapping = aes( x=Anio, y=promedio_industria_hombres)) + 
+  geom_col() +
+  geom_line()
 ```
 
