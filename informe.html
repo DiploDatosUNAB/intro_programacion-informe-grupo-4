@@ -425,7 +425,8 @@ el nombre “Anio”. Y asignamos la nueva tabla a la variable
 ##  8 empleadoras_mujeres Argentina   ARG                1977     NA
 ##  9 empleadoras_mujeres Argentina   ARG                1978     NA
 ## 10 empleadoras_mujeres Argentina   ARG                1979     NA
-## # … with 22,530 more rows</code></pre>
+## # … with 22,530 more rows
+## # ℹ Use `print(n = ...)` to see more rows</code></pre>
 <p>Luego utilizamos la función “pivot_wider” para reordenar las
 variables que aparecían en la primera columna bajo la etiqueta
 “variable” y las ubicamos en distintas columnas. Y asignamos la nueva
@@ -437,25 +438,26 @@ trabajar.</p>
                           mutate(Anio=as.numeric(Anio))</code></pre>
 <pre class="r"><code>empleo_genero_ordenado</code></pre>
 <pre><code>## # A tibble: 1,127 × 23
-##    pais_region codigo_pais_region  Anio empleadoras_mujeres empleadores_hombres
-##    &lt;chr&gt;       &lt;chr&gt;              &lt;dbl&gt;               &lt;dbl&gt;               &lt;dbl&gt;
-##  1 Argentina   ARG                 1970                  NA                  NA
-##  2 Argentina   ARG                 1971                  NA                  NA
-##  3 Argentina   ARG                 1972                  NA                  NA
-##  4 Argentina   ARG                 1973                  NA                  NA
-##  5 Argentina   ARG                 1974                  NA                  NA
-##  6 Argentina   ARG                 1975                  NA                  NA
-##  7 Argentina   ARG                 1976                  NA                  NA
-##  8 Argentina   ARG                 1977                  NA                  NA
-##  9 Argentina   ARG                 1978                  NA                  NA
-## 10 Argentina   ARG                 1979                  NA                  NA
-## # … with 1,117 more rows, and 18 more variables:
-## #   empleo_agricultura_mujeres &lt;dbl&gt;, empleo_agricultura_hombres &lt;dbl&gt;,
-## #   empleo_industria_mujeres &lt;dbl&gt;, empleo_industria_hombres &lt;dbl&gt;,
-## #   empleo_servicios_mujeres &lt;dbl&gt;, empleo_servicios_hombres &lt;dbl&gt;,
+##    pais_…¹ codig…²  Anio emple…³ emple…⁴ emple…⁵ emple…⁶ emple…⁷ emple…⁸ emple…⁹
+##    &lt;chr&gt;   &lt;chr&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+##  1 Argent… ARG      1970      NA      NA      NA      NA      NA      NA      NA
+##  2 Argent… ARG      1971      NA      NA      NA      NA      NA      NA      NA
+##  3 Argent… ARG      1972      NA      NA      NA      NA      NA      NA      NA
+##  4 Argent… ARG      1973      NA      NA      NA      NA      NA      NA      NA
+##  5 Argent… ARG      1974      NA      NA      NA      NA      NA      NA      NA
+##  6 Argent… ARG      1975      NA      NA      NA      NA      NA      NA      NA
+##  7 Argent… ARG      1976      NA      NA      NA      NA      NA      NA      NA
+##  8 Argent… ARG      1977      NA      NA      NA      NA      NA      NA      NA
+##  9 Argent… ARG      1978      NA      NA      NA      NA      NA      NA      NA
+## 10 Argent… ARG      1979      NA      NA      NA      NA      NA      NA      NA
+## # … with 1,117 more rows, 13 more variables: empleo_servicios_hombres &lt;dbl&gt;,
 ## #   empleo_informal_mujeres &lt;dbl&gt;, empleo_informal_hombres &lt;dbl&gt;,
 ## #   legislacion_acoso_sexual &lt;dbl&gt;, autoempleo_mujeres &lt;dbl&gt;,
-## #   autoempleo_hombres &lt;dbl&gt;, empleo_parcial_mujeres &lt;dbl&gt;, …</code></pre>
+## #   autoempleo_hombres &lt;dbl&gt;, empleo_parcial_mujeres &lt;dbl&gt;,
+## #   desempleo_educacion_mujeres &lt;dbl&gt;, desempleo_educacion_hombres &lt;dbl&gt;,
+## #   desempleo_mujeres &lt;dbl&gt;, desempleo_hombres &lt;dbl&gt;,
+## #   trabajo_domestico_no_remunerado_mujeres &lt;dbl&gt;, …
+## # ℹ Use `print(n = ...)` to see more rows, and `colnames()` to see all variable names</code></pre>
 <p>Para contar la cantidad de variables y de casos que hay en la tabla
 utilizamos la siguiente función:</p>
 <pre class="r"><code>glimpse(empleo_genero_ordenado)</code></pre>
@@ -494,50 +496,52 @@ utilizamos la función “filter” y “group_by:</p>
                       group_by(Anio)</code></pre>
 <pre><code>## # A tibble: 1,029 × 23
 ## # Groups:   Anio [49]
-##    pais_region codigo_pais_region  Anio empleadoras_mujeres empleadores_hombres
-##    &lt;chr&gt;       &lt;chr&gt;              &lt;dbl&gt;               &lt;dbl&gt;               &lt;dbl&gt;
-##  1 Argentina   ARG                 1970                  NA                  NA
-##  2 Argentina   ARG                 1971                  NA                  NA
-##  3 Argentina   ARG                 1972                  NA                  NA
-##  4 Argentina   ARG                 1973                  NA                  NA
-##  5 Argentina   ARG                 1974                  NA                  NA
-##  6 Argentina   ARG                 1975                  NA                  NA
-##  7 Argentina   ARG                 1976                  NA                  NA
-##  8 Argentina   ARG                 1977                  NA                  NA
-##  9 Argentina   ARG                 1978                  NA                  NA
-## 10 Argentina   ARG                 1979                  NA                  NA
-## # … with 1,019 more rows, and 18 more variables:
-## #   empleo_agricultura_mujeres &lt;dbl&gt;, empleo_agricultura_hombres &lt;dbl&gt;,
-## #   empleo_industria_mujeres &lt;dbl&gt;, empleo_industria_hombres &lt;dbl&gt;,
-## #   empleo_servicios_mujeres &lt;dbl&gt;, empleo_servicios_hombres &lt;dbl&gt;,
+##    pais_…¹ codig…²  Anio emple…³ emple…⁴ emple…⁵ emple…⁶ emple…⁷ emple…⁸ emple…⁹
+##    &lt;chr&gt;   &lt;chr&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+##  1 Argent… ARG      1970      NA      NA      NA      NA      NA      NA      NA
+##  2 Argent… ARG      1971      NA      NA      NA      NA      NA      NA      NA
+##  3 Argent… ARG      1972      NA      NA      NA      NA      NA      NA      NA
+##  4 Argent… ARG      1973      NA      NA      NA      NA      NA      NA      NA
+##  5 Argent… ARG      1974      NA      NA      NA      NA      NA      NA      NA
+##  6 Argent… ARG      1975      NA      NA      NA      NA      NA      NA      NA
+##  7 Argent… ARG      1976      NA      NA      NA      NA      NA      NA      NA
+##  8 Argent… ARG      1977      NA      NA      NA      NA      NA      NA      NA
+##  9 Argent… ARG      1978      NA      NA      NA      NA      NA      NA      NA
+## 10 Argent… ARG      1979      NA      NA      NA      NA      NA      NA      NA
+## # … with 1,019 more rows, 13 more variables: empleo_servicios_hombres &lt;dbl&gt;,
 ## #   empleo_informal_mujeres &lt;dbl&gt;, empleo_informal_hombres &lt;dbl&gt;,
 ## #   legislacion_acoso_sexual &lt;dbl&gt;, autoempleo_mujeres &lt;dbl&gt;,
-## #   autoempleo_hombres &lt;dbl&gt;, empleo_parcial_mujeres &lt;dbl&gt;, …</code></pre>
+## #   autoempleo_hombres &lt;dbl&gt;, empleo_parcial_mujeres &lt;dbl&gt;,
+## #   desempleo_educacion_mujeres &lt;dbl&gt;, desempleo_educacion_hombres &lt;dbl&gt;,
+## #   desempleo_mujeres &lt;dbl&gt;, desempleo_hombres &lt;dbl&gt;,
+## #   trabajo_domestico_no_remunerado_mujeres &lt;dbl&gt;, …
+## # ℹ Use `print(n = ...)` to see more rows, and `colnames()` to see all variable names</code></pre>
 <p>Podemos ver que, si agrupamos los datos por año, hay 49 grupos.</p>
 <p>Hacemos la misma operación pero filtrando por “pais_region”:</p>
 <pre class="r"><code>empleo_genero_ordenado|&gt; filter(pais_region !=&quot;Latin America &amp; Caribbean&quot; &amp; pais_region != &quot;Mundo&quot; &amp; pais_region != &quot;EspaÃ±a&quot;)|&gt; 
                       group_by(pais_region)</code></pre>
 <pre><code>## # A tibble: 1,029 × 23
 ## # Groups:   pais_region [21]
-##    pais_region codigo_pais_region  Anio empleadoras_mujeres empleadores_hombres
-##    &lt;chr&gt;       &lt;chr&gt;              &lt;dbl&gt;               &lt;dbl&gt;               &lt;dbl&gt;
-##  1 Argentina   ARG                 1970                  NA                  NA
-##  2 Argentina   ARG                 1971                  NA                  NA
-##  3 Argentina   ARG                 1972                  NA                  NA
-##  4 Argentina   ARG                 1973                  NA                  NA
-##  5 Argentina   ARG                 1974                  NA                  NA
-##  6 Argentina   ARG                 1975                  NA                  NA
-##  7 Argentina   ARG                 1976                  NA                  NA
-##  8 Argentina   ARG                 1977                  NA                  NA
-##  9 Argentina   ARG                 1978                  NA                  NA
-## 10 Argentina   ARG                 1979                  NA                  NA
-## # … with 1,019 more rows, and 18 more variables:
-## #   empleo_agricultura_mujeres &lt;dbl&gt;, empleo_agricultura_hombres &lt;dbl&gt;,
-## #   empleo_industria_mujeres &lt;dbl&gt;, empleo_industria_hombres &lt;dbl&gt;,
-## #   empleo_servicios_mujeres &lt;dbl&gt;, empleo_servicios_hombres &lt;dbl&gt;,
+##    pais_…¹ codig…²  Anio emple…³ emple…⁴ emple…⁵ emple…⁶ emple…⁷ emple…⁸ emple…⁹
+##    &lt;chr&gt;   &lt;chr&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+##  1 Argent… ARG      1970      NA      NA      NA      NA      NA      NA      NA
+##  2 Argent… ARG      1971      NA      NA      NA      NA      NA      NA      NA
+##  3 Argent… ARG      1972      NA      NA      NA      NA      NA      NA      NA
+##  4 Argent… ARG      1973      NA      NA      NA      NA      NA      NA      NA
+##  5 Argent… ARG      1974      NA      NA      NA      NA      NA      NA      NA
+##  6 Argent… ARG      1975      NA      NA      NA      NA      NA      NA      NA
+##  7 Argent… ARG      1976      NA      NA      NA      NA      NA      NA      NA
+##  8 Argent… ARG      1977      NA      NA      NA      NA      NA      NA      NA
+##  9 Argent… ARG      1978      NA      NA      NA      NA      NA      NA      NA
+## 10 Argent… ARG      1979      NA      NA      NA      NA      NA      NA      NA
+## # … with 1,019 more rows, 13 more variables: empleo_servicios_hombres &lt;dbl&gt;,
 ## #   empleo_informal_mujeres &lt;dbl&gt;, empleo_informal_hombres &lt;dbl&gt;,
 ## #   legislacion_acoso_sexual &lt;dbl&gt;, autoempleo_mujeres &lt;dbl&gt;,
-## #   autoempleo_hombres &lt;dbl&gt;, empleo_parcial_mujeres &lt;dbl&gt;, …</code></pre>
+## #   autoempleo_hombres &lt;dbl&gt;, empleo_parcial_mujeres &lt;dbl&gt;,
+## #   desempleo_educacion_mujeres &lt;dbl&gt;, desempleo_educacion_hombres &lt;dbl&gt;,
+## #   desempleo_mujeres &lt;dbl&gt;, desempleo_hombres &lt;dbl&gt;,
+## #   trabajo_domestico_no_remunerado_mujeres &lt;dbl&gt;, …
+## # ℹ Use `print(n = ...)` to see more rows, and `colnames()` to see all variable names</code></pre>
 <p>Podemos ver que si agrupamos por países, hay 21 grupos.</p>
 <p>A continuación seleccionamos algunas variables para calcular su valor
 medio, desvío estándard y rango. Elegimos calcular estos datos para el
@@ -588,9 +592,10 @@ total de la fuerza laboral femenina (Año 2018)</h4>
                           autoempleo_mujeres_min = min(autoempleo_mujeres),
                           autoempleo_mujeres_max = max(autoempleo_mujeres))</code></pre>
 <pre><code>## # A tibble: 1 × 4
-##   autoempleo_mujeres_prom autoempleo_mujeres_… autoempleo_muje… autoempleo_muje…
-##                     &lt;dbl&gt;                &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;
-## 1                    30.0                 16.4             5.49             84.9</code></pre>
+##   autoempleo_mujeres_prom autoempleo_mujeres_sd autoempleo_mujeres_min autoemp…¹
+##                     &lt;dbl&gt;                 &lt;dbl&gt;                  &lt;dbl&gt;     &lt;dbl&gt;
+## 1                    30.0                  16.4                   5.49      84.9
+## # … with abbreviated variable name ¹​autoempleo_mujeres_max</code></pre>
 </div>
 <div id="porcentaje-de-hombres-trabajadores-por-cuenta-propia-dentro-del-total-de-la-fuerza-laboral-masculina-año-2018" class="section level4">
 <h4>* Porcentaje de hombres trabajadores por cuenta propia, dentro del
@@ -601,9 +606,10 @@ total de la fuerza laboral masculina (Año 2018)</h4>
                           autoempleo_hombres_min = min(autoempleo_hombres),
                           autoempleo_hombres_max = max(autoempleo_hombres))</code></pre>
 <pre><code>## # A tibble: 1 × 4
-##   autoempleo_hombres_prom autoempleo_hombres_… autoempleo_homb… autoempleo_homb…
-##                     &lt;dbl&gt;                &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;
-## 1                    30.6                 15.2             8.38             81.0</code></pre>
+##   autoempleo_hombres_prom autoempleo_hombres_sd autoempleo_hombres_min autoemp…¹
+##                     &lt;dbl&gt;                 &lt;dbl&gt;                  &lt;dbl&gt;     &lt;dbl&gt;
+## 1                    30.6                  15.2                   8.38      81.0
+## # … with abbreviated variable name ¹​autoempleo_hombres_max</code></pre>
 <ul>
 <li>En los países de América Latina y el Caribe en el año 2018, el
 promedio del porcentaje de mujeres dentro de la fuerza laboral femenina
@@ -617,60 +623,27 @@ máx: 80,95 y valor mín: 8,38).</li>
 </div>
 <div id="hipótesis" class="section level3">
 <h3>Hipótesis</h3>
-<p>Los datos de la tabla tienen muchas variables que pueden cruzarse con
-el objetivo de responder preguntas interesantes.</p>
-<p>Por ejemplo, podríamos relacionar empleo a tiempo parcial de las
-mujeres con el trabajo doméstico no remunerado:</p>
-<p>*¿Existe una relación entre la cantidad de horas que dedican las
-mujeres al trabajo doméstico y de cuidado no remunerado y la cantidad de
-horas que dedican al empleo remunerado, expresado este por el porcentaje
-de la fuerza de trabajo femenina que tiene empleos a tiempo parcial?</p>
-<p>Otro ejemplo podría ser cruzar trabajo doméstico y de cuidado no
-remunerado con informalidad o autoempleo.</p>
-<p>*¿Existe una relación entre la cantidad de tiempo dedicado al trabajo
-doméstico y de cuidado no remunerado y la cantidad de empleos
-informales? (teniendo en cuenta que estos tienen muchas veces mas
-flexibilidades para conciliar la vida laboral y familiar).</p>
-<p>Otras preguntas interesantes que se podrían responder cruzando la
-variable “Año” con otras variables son:</p>
-<p>*¿Cómo fue la evolución del empleo en Latinoamérica y el Caribe desde
-1970 hasta 2018? ¿Aumentó la participación de la mujer en el trabajo
-remunerado? ¿Aumentó la cantidad de tiempo que dedican los hombres al
-trabajo doméstico y de cuidado no remunerado? ¿Aumentó dentro de la
-fuerza laboral femenina la cantidad de mujeres que tienen rol de
-empleadoras?</p>
-<p>Por último, sería interesante cruzar la variable
-“Legislacion_acoso_sexual” con las distintas variables de empleo
-femenino.</p>
-<p>*¿Hay una relación entre la existencia de legislación laboral contra
-el acoso sexual en el ámbito laboral con la participación de la mujer en
-el empleo formal?</p>
-<p>##prueba</p>
-<pre class="r"><code>empleo_genero_largo |&gt; 
-  filter(pais_region !=&quot;Latin America &amp; Caribbean&quot; &amp; pais_region != &quot;Mundo&quot; &amp; pais_region != &quot;EspaÃ±a&quot; &amp; Anio == 2018) |&gt; 
-  filter(startsWith(variable, &quot;empleador&quot;)) |&gt;   
-  separate(variable, into = c(&quot;tipo&quot;, &quot;sexo&quot;), sep = &quot;_&quot;) |&gt;  
-  group_by(sexo) </code></pre>
-<pre><code>## # A tibble: 42 × 6
-## # Groups:   sexo [2]
-##    tipo        sexo    pais_region codigo_pais_region Anio  Valor
-##    &lt;chr&gt;       &lt;chr&gt;   &lt;chr&gt;       &lt;chr&gt;              &lt;chr&gt; &lt;dbl&gt;
-##  1 empleadoras mujeres Argentina   ARG                2018  2.46 
-##  2 empleadoras mujeres Bolivia     BOL                2018  1.85 
-##  3 empleadoras mujeres Brasil      BRA                2018  3.22 
-##  4 empleadoras mujeres Chile       CHL                2018  2.69 
-##  5 empleadoras mujeres Colombia    COL                2018  2.48 
-##  6 empleadoras mujeres Costa Rica  CRI                2018  2.33 
-##  7 empleadoras mujeres Cuba        CUB                2018  0.720
-##  8 empleadoras mujeres Ecuador     ECU                2018  1.63 
-##  9 empleadoras mujeres El Salvador SLV                2018  2.91 
-## 10 empleadoras mujeres Guatemala   GTM                2018  2.22 
-## # … with 32 more rows</code></pre>
-<p>##Analisis</p>
+<p>*Existe una segmentacion horizontal en el mercado de trabajo en
+latinoamerica por la cual las mujeres acceden en menor medida a empleos
+en la industria.</p>
+<p>*¿Se acorto esta brecha en los ultimos 20 años?</p>
 <p>*A continuación, nos porponemos responder y graficar algunas de las
 preguntas formuladas y llegar a una conclusión a traves del analisis de
 los datos.</p>
 </div>
+</div>
+<div id="hipótesis-1" class="section level2">
+<h2>Hipótesis 1</h2>
+<p>*Existe una segmentacion horizontal en el mercado de trabajo en
+latinoamerica por la cual las mujeres acceden en menor medida a empleos
+en la industria.</p>
+<p>*Para responder a nuestra hipotesis, calculamos el promedio de del
+porcentaje dentro de la fuerza laboral masculina que se encuentra
+empleado en la industria y lo mismo para el caso de las mujeres.</p>
+<pre class="r"><code>promedio_industria_x_anio &lt;- empleo_genero_ordenado |&gt; 
+  group_by(Anio) |&gt;
+  summarise(promedio_industria_hombres = mean(empleo_industria_hombres),
+            promedio_industria_mujeres = mean(empleo_industria_mujeres))</code></pre>
 </div>
 
 

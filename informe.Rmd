@@ -137,15 +137,22 @@ empleo_genero_ordenado|> filter(pais_region !="Latin America & Caribbean" & pais
 ## Hipótesis 1
 \*Existe una segmentacion horizontal en el mercado de trabajo en latinoamerica por la cual las mujeres acceden en menor medida a empleos en la industria.
 
+## Hipótesis 2
+\*¿Se acorto esta brecha en los ultimos 20 años?
 
-\*Para responder a nuestra hipotesis, calculamos el promedio de del porcentaje dentro de la fuerza laboral masculina que se encuentra empleado en la industria y lo mismo para el caso de las mujeres.
+\*Para responder a la pregunta, calculamos el promedio para cada uno de los años, de del porcentaje dentro de la fuerza laboral masculina que se encuentra empleado en la industria. Lo mismo hicimos para el caso de las mujeres.
 
 ```{r}
 promedio_industria_x_anio <- empleo_genero_ordenado |> 
   group_by(Anio) |>
   summarise(promedio_industria_hombres = mean(empleo_industria_hombres),
             promedio_industria_mujeres = mean(empleo_industria_mujeres))
- 
-            
+```
+
+
+```{r}
+library(ggplot2)
+
+ggplot2(data=promedio_industria_x_anio, mapping = aes( x=Anio, y=promedio_industria_hombres))
 ```
 
