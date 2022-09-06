@@ -128,42 +128,23 @@ empleo_genero_ordenado|> filter(pais_region !="Latin America & Caribbean" & pais
 
 ### Hipótesis
 
-Los datos de la tabla tienen muchas variables que pueden cruzarse con el objetivo de responder preguntas interesantes.
+\*Existe una segmentacion horizontal en el mercado de trabajo en latinoamerica por la cual las mujeres acceden en menor medida a empleos en la industria.
 
-Por ejemplo, podríamos relacionar empleo a tiempo parcial de las mujeres con el trabajo doméstico no remunerado:
-
-\*¿Existe una relación entre la cantidad de horas que dedican las mujeres al trabajo doméstico y de cuidado no remunerado y la cantidad de horas que dedican al empleo remunerado, expresado este por el porcentaje de la fuerza de trabajo femenina que tiene empleos a tiempo parcial?
-
-Otro ejemplo podría ser cruzar trabajo doméstico y de cuidado no remunerado con informalidad o autoempleo.
-
-\*¿Existe una relación entre la cantidad de tiempo dedicado al trabajo doméstico y de cuidado no remunerado y la cantidad de empleos informales? (teniendo en cuenta que estos tienen muchas veces mas flexibilidades para conciliar la vida laboral y familiar).
-
-Otras preguntas interesantes que se podrían responder cruzando la variable "Año" con otras variables son:
-
-\*¿Cómo fue la evolución del empleo en Latinoamérica y el Caribe desde 1970 hasta 2018? ¿Aumentó la participación de la mujer en el trabajo remunerado? ¿Aumentó la cantidad de tiempo que dedican los hombres al trabajo doméstico y de cuidado no remunerado? ¿Aumentó dentro de la fuerza laboral femenina la cantidad de mujeres que tienen rol de empleadoras?
-
-Por último, sería interesante cruzar la variable "Legislacion_acoso_sexual" con las distintas variables de empleo femenino.
-
-\*¿Hay una relación entre la existencia de legislación laboral contra el acoso sexual en el ámbito laboral con la participación de la mujer en el empleo formal?
-
-##prueba
-
-```{r}
-empleo_genero_largo |> 
-  filter(pais_region !="Latin America & Caribbean" & pais_region != "Mundo" & pais_region != "EspaÃ±a" & Anio == 2018) |> 
-  filter(startsWith(variable, "empleador")) |>   
-  separate(variable, into = c("tipo", "sexo"), sep = "_") |>  
-  group_by(sexo) 
-```
- 
-
-##Analisis
+\*¿Se acorto esta brecha en los ultimos 20 años?
 
 \*A continuación, nos porponemos responder y graficar algunas de las preguntas formuladas y llegar a una conclusión a traves del analisis de los datos.
 
+## Hipótesis 1
+\*Existe una segmentacion horizontal en el mercado de trabajo en latinoamerica por la cual las mujeres acceden en menor medida a empleos en la industria.
 
 
 
-
-
+```{r}
+industria_H_x_anio <- empleo_genero_ordenado |> 
+  group_by(Anio) |>
+  summarise(promedio_industria_hombres = mean(empleo_industria_hombres))
+ 
+ 
+            
+```
 
