@@ -105,6 +105,7 @@ empleo_genero_ordenado|> filter(pais_region !="Latin America & Caribbean" & pais
 
 -   En los países de América Latina y el Caribe en el año 2018, el promedio del porcentaje de mujeres dentro de la fuerza laboral femenina que tienen rol de empleadoras es de 2,41, con un desvío estándar de 1,02 (valor máx: 5,72 y valor mín: 0,72). Mientras que el promedio del porcentaje de hombres dentro de la fuerza laboral masculina con rol de empleadores es de 5,34 con un desvío estándar de 2,64 (valor máx: 14,96 y valor mín: 1,62).
 
+
 #### \* Porcentaje de mujeres trabajadoras por cuenta propia, dentro del total de la fuerza laboral femenina (Año 2018)
 
 ```{r}
@@ -150,6 +151,16 @@ empleo_mercosur <- empleo_genero_ordenado |>
   filter(pais_region == "Argentina" | pais_region == "Uruguay" | pais_region == "Paraguay" | pais_region == "Brasil" | pais_region == "Venezuela") |> 
   filter (Anio >= 1998)
 ```
+\* Para responder la primera pregunta compararemos el promedio de varones y mujeres empleadxs en el sector industrial en los ultimos 20 años dentro de los paises del mercosur y compararemos los resultados.
+```{r}
+promedio_industria_x_genero <- empleo_mercosur |>
+  summarise(promedio_industria_hombres = mean(empleo_industria_hombres),
+            promedio_industria_mujeres = mean(empleo_industria_mujeres))
+
+
+```
+## Gráfico
+
 
 Calcule el promedio agrupado por año para todos los datos existentes dentro de la variable industria mujeres e industria hombres
 
@@ -161,11 +172,31 @@ promedio_industria_x_anio <- empleo_mercosur |>
 ```
 
 
-```{r}
-library(ggplot2)
+##Acontinuacion veremos los datos presentados graficamente 
 
+```{r}
 ggplot(data=promedio_industria_x_anio, mapping = aes( x=Anio, y=promedio_industria_hombres)) + 
   geom_col() +
   geom_line()
+  
 ```
+
+##Para contestar nuestra segunda pregunta queremos ver especificamente que sucede en los años de los extremos, con el objetivo de poder comparar el comportamiento de ambas variables y evaluar si hubo una reduccion o ampliacion de la brecha existentes. Por esta razon filtraremos los años 1998 y 2018.
+```{r}
+  promedio_industria_1998_2018 <- empleo_mercosur |>
+  group_by(Anio) |>
+  filter(Anio == "1998" | Anio == "2018") |>
+  summarise(promedio_industria_hombres = mean(empleo_industria_hombres),
+            promedio_industria_mujeres = mean(empleo_industria_mujeres))
+            
+```
+
+##Acontinuacion veremos los datos presentados graficamente 
+
+
+#A partir de la lectura del grafico podemos concluir que en el periodo 1998 - 2018 no solo no se achico la brecha de acceso a empleos en la industria sino que se agrando, esto se puede explicar por xxx
+
+
+
+
 
