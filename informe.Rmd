@@ -151,26 +151,16 @@ empleo_mercosur <- empleo_genero_ordenado |>
   filter(pais_region == "Argentina" | pais_region == "Uruguay" | pais_region == "Paraguay" | pais_region == "Brasil" | pais_region == "Venezuela") |> 
   filter (Anio >= 1998)
 ```
-\* Para responder la primera pregunta compararemos el promedio de varones y mujeres empleadxs en el sector industrial en los ultimos 20 años dentro de los paises del mercosur y compararemos los resultados.
-```{r}
-promedio_industria_x_genero <- empleo_mercosur |>
-  summarise(promedio_industria_hombres = mean(empleo_industria_hombres),
-            promedio_industria_mujeres = mean(empleo_industria_mujeres))
 
 
-```
-## Gráfico
-
-
-Calcule el promedio agrupado por año para todos los datos existentes dentro de la variable industria mujeres e industria hombres
+##Filtramos los datos disponibles para la empleo industria mujeres y hombres en 2018
 
 ```{r}
-promedio_industria_x_anio <- empleo_mercosur |>
-  group_by(Anio) |>
-  summarise(promedio_industria_hombres = mean(empleo_industria_hombres),
-            promedio_industria_mujeres = mean(empleo_industria_mujeres))
+promedio_industria_2018 <- empleo_mercosur |>
+  filter(Anio == 2018) 
+ 
 ```
-
+##graficamos esto con un grafico de barras que tenga el valor de varones y mujeres
 
 ##Acontinuacion veremos los datos presentados graficamente 
 
@@ -180,29 +170,21 @@ ggplot(data=promedio_industria_x_anio, mapping = aes( x=Anio, y=promedio_industr
   geom_line()
   
 ```
-Calculé el promedio agrupado por pais para todos los datos existentes dentro de la variable industria mujeres e industria hombres en el periodo 1998 - 2018. 
-```{r}
-promedio_industria_x_pais <- empleo_mercosur |>
-  group_by(pais_region) |>
-  summarise(promedio_industria_hombres = mean(empleo_industria_hombres),
-            promedio_industria_mujeres = mean(empleo_industria_mujeres))
-```
 
 
-
-
+##despues hacemos tasa de variacion por pais restando los dos aos de las puntas y lo graficamos
 
 ##Para contestar nuestra segunda pregunta queremos ver especificamente que sucede en los años de los extremos, con el objetivo de poder comparar el comportamiento de ambas variables y evaluar si hubo una reduccion o ampliacion de la brecha existentes. Por esta razon filtraremos los años 1998 y 2018.
-```{r}
-  promedio_industria_1998_2018 <- empleo_mercosur |>
-  group_by(Anio) |>
-  filter(Anio == "1998" | Anio == "2018") |>
-  summarise(promedio_industria_hombres = mean(empleo_industria_hombres),
-            promedio_industria_mujeres = mean(empleo_industria_mujeres))
-            
-```
+
 
 ##Acontinuacion veremos los datos presentados graficamente 
+
+
+##Grafico con la variacion que fueron tomando las variables empleo industria mujeres y hmbres en todos los años de 1998 a 2018 para argentina
+
+
+
+
 
 
 #A partir de la lectura del grafico podemos concluir que en el periodo 1998 - 2018 no solo no se achico la brecha de acceso a empleos en la industria sino que se agrando, esto se puede explicar por xxx
