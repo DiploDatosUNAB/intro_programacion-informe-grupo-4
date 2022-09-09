@@ -204,6 +204,16 @@ ggplot(data=promedio_industria_x_anio, mapping = aes( x=Anio, y=promedio_industr
 #A partir de la lectura del grafico podemos concluir que en el periodo 1998 - 2018 no solo no se achico la brecha de acceso a empleos en la industria sino que se agrando, esto se puede explicar por xxx
 
 
+##prueba ro
+```{r}
+industria_1998_2018 <- select(empleo_mercosur, pais_region, Anio, empleo_industria_mujeres, empleo_industria_hombres)|>
+  filter(Anio == 1998 | Anio == 2018) |> 
+  pivot_longer(cols =c("empleo_industria_hombres","empleo_industria_mujeres"),
+               names_to = "industria_x_genero",  
+               values_to = "valor")
+```
 
+
+ 
 
 
