@@ -134,7 +134,7 @@ empleo_genero_ordenado|> filter(pais_region !="Latin America & Caribbean" & pais
 
 \*¿Se acorto esta brecha en los ultimos 20 años?
 
-\*A continuación, nos porponemos responder y graficar algunas de las preguntas formuladas y llegar a una conclusión a traves del analisis de los datos.
+\*A continuación, nos proponemos responder y graficar algunas de las preguntas formuladas y llegar a una conclusión a traves del analisis de los datos.
 
 ## Hipótesis 1
 \*Existe una segmentacion horizontal en el mercado de trabajo en latinoamerica por la cual las mujeres acceden en menor medida a empleos en la industria.
@@ -154,24 +154,20 @@ empleo_mercosur <- empleo_genero_ordenado |>
 
 
 ##Filtramos los datos disponibles para la empleo industria mujeres y hombres en 2018
-
+##prueba flor
 ```{r}
-promedio_industria_2018 <- empleo_mercosur |>
-  filter(Anio == 2018) 
+industria_2018 <- select(empleo_mercosur, pais_region, Anio, empleo_industria_mujeres, empleo_industria_hombres)|>
+  filter(Anio == 2018) |> 
+  pivot_longer(cols =c("empleo_industria_hombres","empleo_industria_mujeres"),
+               names_to = "industria_x_genero",  
+               values_to = "valor")
  
 ```
 ##graficamos esto con un grafico de barras que tenga el valor de varones y mujeres
 
-##prueba flor
-```{r}
-industria_agrupado_x_pais<-promedio_industria_x_pais|> 
-pivot_longer(cols =c("promedio_industria_hombres","promedio_industria_mujeres"),
-               names_to = "promedio_industria_x_genero",  
-               values_to = "valor")
-```
 
 ```{r}
-ggplot(industria_agrupado_x_pais, aes(x=pais_region,y=valor, fill=promedio_industria_x_genero))+geom_col(position = "dodge")
+ggplot(industria_2018, aes(x=pais_region,y=valor, fill=industria_x_genero))+geom_col(position = "dodge")
 ```
 
 
