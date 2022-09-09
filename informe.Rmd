@@ -162,7 +162,7 @@ industria_2018 <- select(empleo_mercosur, pais_region, Anio, empleo_industria_mu
 ```{r}
 ggplot(industria_2018, aes(x=pais_region,y=valor, fill=industria_x_genero))+
   geom_col(position = "dodge") +
-  ggtitle ("Brecha de acceso a la industria en 2018") + 
+  ggtitle ("Brecha de acceso al empleo en industria - año 2018") + 
   labs(x = "Paises Mercosur",y = "Porcentaje dentro de la fuerza laboral") 
 ```
 
@@ -174,10 +174,14 @@ Esta inserción laboral diferenciada se debe a los estereotipos de género, que 
 \*¿Se acorto esta brecha de acceso a empleos en la industria en los ultimos 20 años?
 
 
-##Para contestar nuestra segunda pregunta queremos ver especificamente que sucede en los años de los extremos, con el objetivo de poder comparar el comportamiento de ambas variables y evaluar si hubo una reduccion o ampliacion de la brecha existentes. Por esta razon filtraremos los años 1998 y 2018 y calcularemos la variacion entre puntas
+\*Para contestar nuestra segunda pregunta queremos ver especificamente que sucede en los años de los extremos, con el objetivo de poder comparar el comportamiento de ambas variables y evaluar si hubo una reduccion o ampliacion de la brecha existente. Por esta razon filtraremos los años 1998 y 2018 y calcularemos la variacion entre puntas.
 
 
 ##Acontinuacion veremos los datos presentados graficamente 
+
+
+
+
 
 
 ##Grafico con la variacion que fueron tomando las variables empleo industria mujeres y hmbres en todos los años de 1998 a 2018 para argentina
@@ -190,19 +194,12 @@ Esta inserción laboral diferenciada se debe a los estereotipos de género, que 
 #A partir de la lectura del grafico podemos concluir que en el periodo 1998 - 2018 no solo no se achico la brecha de acceso a empleos en la industria sino que se agrando, esto se puede explicar por xxx
 
 
-##prueba ro
-```{r}
-industria_1998_2018 <- select(empleo_mercosur, pais_region, Anio, empleo_industria_mujeres, empleo_industria_hombres)|>
-  filter(Anio == 1998 | Anio == 2018) |> 
-  pivot_longer(cols =c("empleo_industria_hombres","empleo_industria_mujeres"),
-               names_to = "industria_x_genero",  
-               values_to = "valor")
-```
+##prueba ro para sacar tasa de variacion
 
-para sacar tasa de variacion
 ```{r}
-pruebaindustria_2018_1998 <- select(empleo_genero, variable, pais_region, "1998", "2018")|>
-  filter(variable == "empleo_industria_hombres" | variable == "empleo_industria_mujeres")
+variacion_2018_1998 <- select(empleo_genero, variable, pais_region, "1998", "2018")|>
+  filter(variable == "empleo_industria_hombres" | variable == "empleo_industria_mujeres")|>
+  mutate(tasa_variacion=`2018`-`1998`)
 ```
 
 
