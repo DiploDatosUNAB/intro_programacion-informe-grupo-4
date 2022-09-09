@@ -144,7 +144,7 @@ empleo_genero_ordenado|> filter(pais_region !="Latin America & Caribbean" & pais
 
 ```{r}
 empleo_mercosur <- select(empleo_genero_ordenado, pais_region, Anio, empleo_industria_mujeres, empleo_industria_hombres) |>
-  filter(pais_region == "Argentina" | pais_region == "Uruguay" | pais_region == "Paraguay" | pais_region == "Brasil" | pais_region == "Venezuela") |> 
+  filter(pais_region == "Argentina" | pais_region == "Uruguay" | pais_region == "Paraguay" | pais_region == "Brasil" | pais_region == "Venezuela" | pais_region == "Bolivia") |> 
   filter (Anio >= 1998)
 ```
 
@@ -163,47 +163,44 @@ industria_2018 <- select(empleo_mercosur, pais_region, Anio, empleo_industria_mu
 ggplot(industria_2018, aes(x=pais_region,y=valor, fill=industria_x_genero))+
   geom_col(position = "dodge") +
   ggtitle ("Brecha de acceso al empleo en industria - año 2018") + 
-  labs(x = "Paises Mercosur",y = "Porcentaje dentro de la fuerza laboral") 
+  labs(x = "Paises Mercosur",y = "Porcentaje dentro de la fuerza laboral") + 
+  theme_minimal()
+  
 ```
 
-\*Del grafico podemos leer que nuestra hipotesis se confirma: el peso del sector industrial como empleador de la fuerza laboral masculina en los paises del Mercosur es mucho mayor que en el caso de la fuerza laboral femenina. Entendemos que esto se debe al fenomeno llamado "segmentación vertical". Es decir, el hecho de que existan actividades economicas que emplean mayormente a varones, llamadas "masculinizadas" y actividades que emplean mayormente a mujeres, llamadas "feminizadas". 
-Esta inserción laboral diferenciada se debe a los estereotipos de género, que determina que haya ciertos trabajos para mujeres y otros para varones. En este caso por ser la industria un trabajo asociado socialmente a los varones, es una actividad altamente masculinizada y por lo tanto las mujeres tienen un acceso mucho menor.
+\*Del grafico presentado podemos leer que nuestra hipotesis se confirma: el peso del sector industrial como empleador de la fuerza laboral masculina en los paises del Mercosur es mucho mayor que en el caso de la fuerza laboral femenina. Entendemos que esto se debe al fenomeno llamado "segmentación vertical". Es decir, el hecho de que existan actividades economicas que emplean mayormente a varones, denominadas "masculinizadas" y actividades que emplean mayormente a mujeres, denominadas "feminizadas". 
+Esta inserción laboral diferenciada se debe a los estereotipos de género, los cuales determinan que haya ciertos trabajos considerados para mujeres y otros para varones. En este caso, por ser la industria un trabajo asociado socialmente a los varones, es una actividad altamente masculinizada y por lo tanto las mujeres tienen un acceso mucho menor.
 
 
 ##Hipotesis 2
 \*¿Se acorto esta brecha de acceso a empleos en la industria en los ultimos 20 años?
 
 
-\*Para contestar nuestra segunda pregunta queremos ver especificamente que sucede en los años de los extremos, con el objetivo de poder comparar el comportamiento de ambas variables y evaluar si hubo una reduccion o ampliacion de la brecha existente. Por esta razon filtraremos los años 1998 y 2018 y calcularemos la variacion entre puntas.
+\*Para contestar nuestra segunda pregunta queremos ver especificamente que sucede en los años de los extremos con respecto a la variable que mide el porcentaje de mujeres que son empleadas en la industria, dentro del total de la fuerza de trabajo de mujeres del pais. El objetivo de poder comparar el comportamiento de dicha variable y verificar si hubo una reduccion o ampliacion del acceso al empleo industrial por parte de mujeres, para eso calcularemos variacion entre puntas.
+
+```{r}
+variacion_mujeres_2018_1998 <- select(empleo_genero, variable, pais_region, "1998", "2018")|>
+  filter(pais_region == "Argentina" | pais_region == "Uruguay" | pais_region == "Paraguay" | pais_region == "Brasil" | pais_region == "Venezuela" | pais_region == "Bolivia") |>
+  filter(variable == "empleo_industria_mujeres")|>
+  mutate(variacion=`2018`-`1998`)
+```
 
 
 ##Acontinuacion veremos los datos presentados graficamente 
 
-
-
-
-
-
-##Grafico con la variacion que fueron tomando las variables empleo industria mujeres y hmbres en todos los años de 1998 a 2018 para argentina
-
-
-
-
-
-
-#A partir de la lectura del grafico podemos concluir que en el periodo 1998 - 2018 no solo no se achico la brecha de acceso a empleos en la industria sino que se agrando, esto se puede explicar por xxx
-
-
-##prueba ro para sacar tasa de variacion
-
 ```{r}
-variacion_2018_1998 <- select(empleo_genero, variable, pais_region, "1998", "2018")|>
-  filter(variable == "empleo_industria_hombres" | variable == "empleo_industria_mujeres")|>
-  mutate(tasa_variacion=`2018`-`1998`)
+ ggplot (variacion_mujeres_2018_1998, aes(y=variacion)) +
+   geom_segment(aes(y=variacion, yend=variacion, x=`1998`, xend=`2018`)) +
+   geom_text(aes(y=variacion, x=(`1998`+`2018`)/2, label=dif, vjust=1.5)) + 
+   geom_point(data=variacion_mujeres_2018_1998, aes(y=variacion, x=value, color=key), size=4) +
+   labs(title="Variación del procentaje de la fuerza laboral femenina inserta en la industria", subtitle="Entre los años 1998 y 2018", x="Paises", y="Variación", color="Año") +
+     theme_minimal()
 ```
 
+\*A partir de la lectura del grafico podemos concluir que en el periodo 1998 - 2018 no solo no se achico la brecha de acceso a empleos en la industria sino que se agrando. La tasa de variacion en todos los casos es negativa, lo cual nos muestra que el porcentaje de mujeres que tienen empleos dentro del sector industrial se redujo.
 
 
 
 
-
+##¿¿¿¿Grafico con la variacion que fueron tomando las variables empleo industria mujeres y hmbres en todos los años de 1998 a 2018 para argentina??
+       
