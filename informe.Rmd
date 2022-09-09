@@ -130,31 +130,26 @@ empleo_genero_ordenado|> filter(pais_region !="Latin America & Caribbean" & pais
 
 ### Hipótesis
 
-\*Existe una segmentacion horizontal en el mercado de trabajo en latinoamerica por la cual las mujeres acceden en menor medida a empleos en la industria.
+\*Existe una segmentacion horizontal en el mercado de trabajo de los paises del Mercosur por la cual las mujeres acceden en menor medida a empleos en la industria.
 
-\*¿Se acorto esta brecha en los ultimos 20 años?
+\*¿Se acorto esta brecha de acceso a empleos en la industria en los ultimos 20 años?
 
 \*A continuación, nos proponemos responder y graficar algunas de las preguntas formuladas y llegar a una conclusión a traves del analisis de los datos.
 
 ## Hipótesis 1
 \*Existe una segmentacion horizontal en el mercado de trabajo en latinoamerica por la cual las mujeres acceden en menor medida a empleos en la industria.
 
-## Hipótesis 2
-\*¿Se acorto esta brecha en los ultimos 20 años?
 
-\*Para responder a la pregunta, calculamos el promedio para cada uno de los años, de del porcentaje dentro de la fuerza laboral masculina de los paises del Mercosur que se encuentra empleado en la industria. Lo mismo hicimos para el caso de las mujeres.
-
-\* Filtré los datos existentes para los paises del mercosur dentro de los años que van de 1998 en adelante.
+\* Para responder esta pregunta comenzamos filtrando los datos existentes para las variables a analizar, en los paises del mercosur dentro de los años que van de 1998 en adelante.
 
 ```{r}
-empleo_mercosur <- empleo_genero_ordenado |> 
+empleo_mercosur <- select(empleo_genero_ordenado, pais_region, Anio, empleo_industria_mujeres, empleo_industria_hombres) |>
   filter(pais_region == "Argentina" | pais_region == "Uruguay" | pais_region == "Paraguay" | pais_region == "Brasil" | pais_region == "Venezuela") |> 
   filter (Anio >= 1998)
 ```
 
+\* Luego filtramos los datos disponibles para 2018 y graficamos como se comportan ambas variables en los distintos paises en dicho año.
 
-##Filtramos los datos disponibles para la empleo industria mujeres y hombres en 2018
-##prueba flor
 ```{r}
 industria_2018 <- select(empleo_mercosur, pais_region, Anio, empleo_industria_mujeres, empleo_industria_hombres)|>
   filter(Anio == 2018) |> 
@@ -163,32 +158,23 @@ industria_2018 <- select(empleo_mercosur, pais_region, Anio, empleo_industria_mu
                values_to = "valor")
  
 ```
-##graficamos esto con un grafico de barras que tenga el valor de varones y mujeres
-
 
 ```{r}
-ggplot(industria_2018, aes(x=pais_region,y=valor, fill=industria_x_genero))+geom_col(position = "dodge")
+ggplot(industria_2018, aes(x=pais_region,y=valor, fill=industria_x_genero))+
+  geom_col(position = "dodge") +
+  ggtitle ("Brecha de acceso a la industria en 2018") + 
+  labs(x = "Paises Mercosur",y = "Porcentaje dentro de la fuerza laboral") 
 ```
 
+\*Del grafico podemos leer que nuestra hipotesis se confirma: el peso del sector industrial como empleador de la fuerza laboral masculina en los paises del Mercosur es mucho mayor que en el caso de la fuerza laboral femenina. Entendemos que esto se debe al fenomeno llamado "segmentación vertical". Es decir, el hecho de que existan actividades economicas que emplean mayormente a varones, llamadas "masculinizadas" y actividades que emplean mayormente a mujeres, llamadas "feminizadas". 
+Esta inserción laboral diferenciada se debe a los estereotipos de género, que determina que haya ciertos trabajos para mujeres y otros para varones. En este caso por ser la industria un trabajo asociado socialmente a los varones, es una actividad altamente masculinizada y por lo tanto las mujeres tienen un acceso mucho menor.
 
 
+##Hipotesis 2
+\*¿Se acorto esta brecha de acceso a empleos en la industria en los ultimos 20 años?
 
 
-
-
-##Acontinuacion veremos los datos presentados graficamente 
-
-```{r}
-ggplot(data=promedio_industria_x_anio, mapping = aes( x=Anio, y=promedio_industria_hombres)) + 
-  geom_col() +
-  geom_line()
-  
-```
-
-
-##despues hacemos tasa de variacion por pais restando los dos aos de las puntas y lo graficamos
-
-##Para contestar nuestra segunda pregunta queremos ver especificamente que sucede en los años de los extremos, con el objetivo de poder comparar el comportamiento de ambas variables y evaluar si hubo una reduccion o ampliacion de la brecha existentes. Por esta razon filtraremos los años 1998 y 2018.
+##Para contestar nuestra segunda pregunta queremos ver especificamente que sucede en los años de los extremos, con el objetivo de poder comparar el comportamiento de ambas variables y evaluar si hubo una reduccion o ampliacion de la brecha existentes. Por esta razon filtraremos los años 1998 y 2018 y calcularemos la variacion entre puntas
 
 
 ##Acontinuacion veremos los datos presentados graficamente 
@@ -213,7 +199,14 @@ industria_1998_2018 <- select(empleo_mercosur, pais_region, Anio, empleo_industr
                values_to = "valor")
 ```
 
+para sacar tasa de variacion
+```{r}
+pruebaindustria_2018_1998 <- select(empleo_genero, variable, pais_region, "1998", "2018")|>
+  filter(variable == "empleo_industria_hombres" | variable == "empleo_industria_mujeres")
+```
 
- 
+
+
+
 
 
