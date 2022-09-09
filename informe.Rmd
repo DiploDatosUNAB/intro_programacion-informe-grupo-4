@@ -162,6 +162,24 @@ promedio_industria_2018 <- empleo_mercosur |>
 ```
 ##graficamos esto con un grafico de barras que tenga el valor de varones y mujeres
 
+##prueba flor
+```{r}
+industria_agrupado_x_pais<-promedio_industria_x_pais|> 
+pivot_longer(cols =c("promedio_industria_hombres","promedio_industria_mujeres"),
+               names_to = "promedio_industria_x_genero",  
+               values_to = "valor")
+```
+
+```{r}
+ggplot(industria_agrupado_x_pais, aes(x=pais_region,y=valor, fill=promedio_industria_x_genero))+geom_col(position = "dodge")
+```
+
+
+
+
+
+
+
 ##Acontinuacion veremos los datos presentados graficamente 
 
 ```{r}
