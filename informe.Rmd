@@ -136,7 +136,7 @@ empleo_genero_ordenado|> filter(pais_region !="Latin America & Caribbean" & pais
 
 \*A continuación, nos proponemos responder y graficar algunas de las preguntas formuladas y llegar a una conclusión a traves del analisis de los datos.
 
-## Hipótesis 1
+### Hipótesis 1
 \*Existe una segmentacion horizontal en el mercado de trabajo en latinoamerica por la cual las mujeres acceden en menor medida a empleos en la industria.
 
 
@@ -164,6 +164,9 @@ ggplot(industria_2018, aes(x=pais_region,y=valor, fill=industria_x_genero))+
   geom_col(position = "dodge") +
   ggtitle ("Brecha de acceso al empleo en industria - año 2018") + 
   labs(x = "Paises Mercosur",y = "Porcentaje dentro de la fuerza laboral") + 
+  geom_text(aes(label = round(valor, digits = 1)),
+    position = position_dodge(0.9),
+    vjust = -0.5)+
   theme_minimal()
   
 ```
@@ -172,7 +175,7 @@ ggplot(industria_2018, aes(x=pais_region,y=valor, fill=industria_x_genero))+
 Esta inserción laboral diferenciada se debe a los estereotipos de género, los cuales determinan que haya ciertos trabajos considerados para mujeres y otros para varones. En este caso, por ser la industria un trabajo asociado socialmente a los varones, es una actividad altamente masculinizada y por lo tanto las mujeres tienen un acceso mucho menor.
 
 
-##Hipotesis 2
+### Hipotesis 2
 \*¿Se vio un incremento del peso de la industria como sector empleador de la fuerza laboral de mujeres en los ultimos 20 años en los paises del Mercosur?
 
 
@@ -200,9 +203,12 @@ ggplot(aes(x=pais_region,y=empleo_industria_mujeres, fill=Anio))+
       que trabaja en la industria, entre 1998 y 2018, 
              para cada pais del Mercosur") + 
   labs(x = "Paises Mercosur",y = "Porcentaje (%)") +
+  geom_text(aes(label = round(empleo_industria_mujeres, digits = 1)),
+    position = position_dodge(0.9),
+    vjust = -0.5) +
   theme_minimal()
 ```
 
 
-\*A partir de la lectura del grafico podemos concluir que en el periodo 1998 - 2018 no solo no se achico la brecha de acceso a empleos en la industria sino que se agrando. La tasa de variacion en todos los casos es negativa, lo cual nos muestra que el porcentaje de mujeres que tienen empleos dentro del sector industrial se redujo.
+\*A partir de la lectura del grafico podemos concluir que en el periodo 1998 - 2018 no solo no crecio el acceso a empleos en la industria de las mujeres sino que disminuyó. La tasa de variacion en todos los casos es negativa, lo cual nos muestra que el porcentaje de mujeres que tienen empleos dentro del sector industrial se redujo.
 
