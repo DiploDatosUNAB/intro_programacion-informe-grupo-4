@@ -173,10 +173,10 @@ Esta inserción laboral diferenciada se debe a los estereotipos de género, los 
 
 
 ##Hipotesis 2
-\*¿Se acorto esta brecha de acceso a empleos en la industria en los ultimos 20 años?
+\*¿Se vio un incremento del peso de la industria como sector empleador de la fuerza laboral de mujeres en los ultimos 20 años en los paises del Mercosur?
 
 
-\*Para contestar nuestra segunda pregunta queremos ver especificamente que sucede en los años de los extremos con respecto a la variable que mide el porcentaje de mujeres que son empleadas en la industria, dentro del total de la fuerza de trabajo de mujeres del pais. El objetivo de poder comparar el comportamiento de dicha variable y verificar si hubo una reduccion o ampliacion del acceso al empleo industrial por parte de mujeres, para eso calcularemos variacion entre puntas.
+\*Para contestar nuestra segunda pregunta queremos ver especificamente que sucede en los años de los extremos con respecto a la variable que mide el porcentaje de mujeres que son empleadas en la industria, dentro del total de la fuerza de trabajo de mujeres del pais. El objetivo es poder comparar el comportamiento de dicha variable entre los años 1998 y 2018 y verificar si hubo una reduccion o ampliacion del acceso al empleo industrial por parte de mujeres. Para eso calcularemos variacion entre puntas.
 
 ```{r}
 variacion_mujeres_2018_1998 <- select(empleo_genero, variable, pais_region, "1998", "2018")|>
@@ -184,23 +184,25 @@ variacion_mujeres_2018_1998 <- select(empleo_genero, variable, pais_region, "199
   filter(variable == "empleo_industria_mujeres")|>
   mutate(variacion=`2018`-`1998`)
 ```
+```{r}
+industria_1998_2018 <- select(empleo_mercosur, pais_region, Anio, empleo_industria_mujeres)|>
+  filter(Anio == 1998 | Anio == 2018) 
+```
 
-
-##Acontinuacion veremos los datos presentados graficamente 
+##A continuacion veremos los datos presentados graficamente 
 
 ```{r}
- ggplot (variacion_mujeres_2018_1998, aes(y=variacion)) +
-   geom_segment(aes(y=variacion, yend=variacion, x=`1998`, xend=`2018`)) +
-   geom_text(aes(y=variacion, x=(`1998`+`2018`)/2, label=dif, vjust=1.5)) + 
-   geom_point(data=variacion_mujeres_2018_1998, aes(y=variacion, x=value, color=key), size=4) +
-   labs(title="Variación del procentaje de la fuerza laboral femenina inserta en la industria", subtitle="Entre los años 1998 y 2018", x="Paises", y="Variación", color="Año") +
-     theme_minimal()
+industria_1998_2018 |>
+mutate(Anio=as.character(Anio)) |>
+ggplot(aes(x=pais_region,y=empleo_industria_mujeres, fill=Anio))+
+  geom_col(position = "dodge") +
+  ggtitle ("Variación del porcentaje de la fuerza laboral femenina 
+      que trabaja en la industria, entre 1998 y 2018, 
+             para cada pais del Mercosur") + 
+  labs(x = "Paises Mercosur",y = "Porcentaje (%)") +
+  theme_minimal()
 ```
+
 
 \*A partir de la lectura del grafico podemos concluir que en el periodo 1998 - 2018 no solo no se achico la brecha de acceso a empleos en la industria sino que se agrando. La tasa de variacion en todos los casos es negativa, lo cual nos muestra que el porcentaje de mujeres que tienen empleos dentro del sector industrial se redujo.
 
-
-
-
-##¿¿¿¿Grafico con la variacion que fueron tomando las variables empleo industria mujeres y hmbres en todos los años de 1998 a 2018 para argentina??
-       
