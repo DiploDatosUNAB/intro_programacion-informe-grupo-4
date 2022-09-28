@@ -137,33 +137,23 @@ empleo_genero_ordenado|> filter(pais_region !="Latin America & Caribbean" & pais
 \*A continuación, nos proponemos responder y graficar algunas de las preguntas formuladas y llegar a una conclusión a traves del analisis de los datos.
 
 ### Hipótesis 1
-\*Existe una segmentacion horizontal en el mercado de trabajo en latinoamerica por la cual las mujeres acceden en menor medida a empleos en la industria.
+\*Existe una segmentacion horizontal en el mercado de trabajo en los paises del mercosur por la cual las mujeres acceden en menor medida a empleos en la industria.
 
 
 \* Para responder esta pregunta comenzamos filtrando los datos existentes para las variables a analizar, en los paises del mercosur dentro de los años que van de 1998 en adelante.
 
-\*FILTRO PARA VER LA PARTICIPACIÓN POR GENERO EN EL SECTOR INDUSTRIAL
 
 ```{r}
-empleo_industria_mercosur <- select(empleo_genero_ordenado, pais_region, Anio, empleo_industria_mujeres, empleo_industria_hombres) |>
+empleo_mercosur <- select(empleo_genero_ordenado, pais_region, Anio, empleo_industria_mujeres, empleo_industria_hombres, empleo_servicios_mujeres, empleo_servicios_hombres) |>
   filter(pais_region %in% c("Argentina", "Uruguay", "Paraguay", "Brasil", "Venezuela", "Bolivia" ))|> 
   filter (Anio >= 1998)
 ```
-
-\*FILTRO PARA VER LA PARTICIPACIÓN POR GENERO EN EL SECTOR SERVICIOS
-
-```{r}
-empleo_servicios_mercosur <- select(empleo_genero_ordenado, pais_region, Anio, empleo_servicios_mujeres, empleo_servicios_hombres) |>
-  filter(pais_region %in% c("Argentina", "Uruguay", "Paraguay", "Brasil", "Venezuela", "Bolivia" ))|> 
-  filter (Anio >= 1998)
-```
-
 
 
 \* Luego ordenamos la tabla, filtramos los datos disponibles para 2018 y graficamos como se comportan las variables en los distintos paises en dicho año.
 
 ```{r}
-industria_2018 <- select(empleo_genero_ordenado, pais_region, Anio, empleo_industria_mujeres, empleo_industria_hombres)|>
+industria_2018 <- select(empleo_mercosur, pais_region, Anio, empleo_industria_mujeres, empleo_industria_hombres)|>
   filter(pais_region %in% c("Argentina", "Uruguay", "Paraguay", "Brasil", "Venezuela", "Bolivia" ))|>
   filter(Anio == 2018) |> 
   pivot_longer(cols =c("empleo_industria_hombres","empleo_industria_mujeres"),
@@ -184,7 +174,7 @@ ggplot(industria_2018, aes(x=pais_region,y=valor, fill=industria_x_genero))+
   
 ```
 ```{r}
-servicios_2018 <- select(empleo_genero_ordenado, pais_region, Anio, empleo_servicios_mujeres, empleo_servicios_hombres)|>
+servicios_2018 <- select(empleo_mercosur, pais_region, Anio, empleo_servicios_mujeres, empleo_servicios_hombres)|>
   filter(pais_region %in% c("Argentina", "Uruguay", "Paraguay", "Brasil", "Venezuela", "Bolivia" ))|>
   filter(Anio == 2018) |> 
   pivot_longer(cols =c("empleo_servicios_hombres","empleo_servicios_mujeres"),
@@ -205,7 +195,8 @@ ggplot(servicios_2018, aes(x=pais_region,y=valor, fill=servicios_x_genero))+
 ```
 
 
-\*Del grafico presentado podemos leer que nuestra hipotesis se confirma: el peso del sector industrial como empleador de la fuerza laboral masculina en los paises del Mercosur es mucho mayor que en el caso de la fuerza laboral femenina. Lo contrario ocurre al analizar el sector servicios. Entendemos que esto se debe al fenomeno llamado "segmentación vertical". Es decir, el hecho de que existan actividades economicas que emplean mayormente a varones, denominadas "masculinizadas" y actividades que emplean mayormente a mujeres, denominadas "feminizadas". 
+\*Del grafico presentado podemos leer que nuestra hipotesis se confirma: el peso del sector industrial como empleador de la fuerza laboral masculina en los paises del Mercosur es mucho mayor que en el caso de la fuerza laboral femenina. Por otro lado, al analizar el sector servicios las variables se comportan de forma inversa, es decir que el dicho sector emplea en mayor proporcion a mujeres. 
+Entendemos que esto se debe al fenomeno llamado "segmentación vertical". Es decir, el hecho de que existan actividades economicas que emplean mayormente a varones, denominadas "masculinizadas" y actividades que emplean mayormente a mujeres, denominadas "feminizadas". 
 Esta inserción laboral diferenciada se debe a los estereotipos de género, los cuales determinan que haya ciertos trabajos considerados para mujeres y otros para varones. En este caso, por ser la industria un trabajo asociado socialmente a los varones, es una actividad altamente masculinizada y por lo tanto las mujeres tienen un acceso mucho menor. 
 
 
@@ -217,7 +208,7 @@ Esta inserción laboral diferenciada se debe a los estereotipos de género, los 
 
 ```{r}
 variacion_mujeres_2018_1998 <- select(empleo_genero, variable, pais_region, "1998", "2018")|>
-  filter(pais_region == "Argentina" | pais_region == "Uruguay" | pais_region == "Paraguay" | pais_region == "Brasil" | pais_region == "Venezuela" | pais_region == "Bolivia") |>
+  filter(pais_region %in% c("Argentina", "Uruguay", "Paraguay", "Brasil", "Venezuela", "Bolivia" )) |>
   filter(variable == "empleo_industria_mujeres")|>
   mutate(variacion=`2018`-`1998`)
 ```
@@ -234,16 +225,77 @@ mutate(Anio=as.character(Anio)) |>
 ggplot(aes(x=pais_region,y=empleo_industria_mujeres, fill=Anio))+
   geom_col(position = "dodge") +
   scale_fill_manual(values = c("1998" = "#FFDAB9", "2018" = "#41B7C4")) +
-  ggtitle ("  Variación del porcentaje de la fuerza laboral femenina 
-        que trabaja en la industria, entre 1998 y 2018, 
-             para cada pais del Mercosur") + 
+   ggtitle ("Porcentaje de la fuerza laboral femenina que trabaja en industria, 
+               en 1998 y 2018, para cada pais del Mercosur") + 
   labs(x = "Paises Mercosur",y = "Porcentaje (%)") +
   geom_text(aes(label = round(empleo_industria_mujeres, digits = 1)),
     position = position_dodge(0.9),
     vjust = -0.5) +
   theme_minimal()
 ```
+```{r}
 
+ggplot(empleo_mercosur, aes(x = Anio, y = empleo_industria_mujeres, group = pais_region)) +
+  geom_line (aes(colour = pais_region), size = 0.8)  +
+    scale_y_continuous(limits= c(7, 15))+
+  labs(title = "Variación del porcentaje de la fuerza laboral femenina 
+        que trabaja en la industria, entre 1998 y 2018, 
+             para cada pais del Mercosur",
+       x = "Año",
+       y = "Porcentaje(%)") +
+theme_minimal() +
+  theme (axis.text.x= element_text(  angle= 90, hjust= 1),
+         legend.title = element_text(color ="white"))
+```
+
+         
+         
 
 \*A partir de la lectura del grafico podemos concluir que en el periodo 1998 - 2018 no solo no crecio el acceso a empleos en la industria de las mujeres sino que disminuyó. La tasa de variacion en todos los casos es negativa, lo cual nos muestra que el porcentaje de mujeres que tienen empleos dentro del sector industrial se redujo.
+
+
+
+
+
+
+
+\*PRUEBA MISMOS GRAFICOS PERO CON SECTOR SERVICIOS - (ESTO NO SE SI NOS SUMA, VER SI LO DEJAMOS O NO)
+Podemos ver como la participacion de mujeres disminuye en industria y aumenta en servicios
+
+```{r}
+servicios_1998_2018 <- select(empleo_mercosur, pais_region, Anio, empleo_servicios_mujeres)|>
+  filter(Anio == 1998 | Anio == 2018) 
+```
+
+```{r}
+servicios_1998_2018 |>
+mutate(Anio=as.character(Anio)) |>
+ggplot(aes(x=pais_region,y=empleo_servicios_mujeres, fill=Anio))+
+  geom_col(position = "dodge") +
+  scale_fill_manual(values = c("1998" = "#FFDAB9", "2018" = "#41B7C4")) +
+  ggtitle ("Porcentaje de la fuerza laboral femenina que trabaja en servicios, 
+               en 1998 y 2018, para cada pais del Mercosur") + 
+  labs(x = "Paises Mercosur",y = "Porcentaje (%)") +
+  geom_text(aes(label = round(empleo_servicios_mujeres, digits = 1)),
+    position = position_dodge(0.9),
+    vjust = -0.5) +
+  theme_minimal()
+```
+
+
+```{r}
+
+ggplot(empleo_mercosur, aes(x = Anio, y = empleo_servicios_mujeres, group = pais_region)) +
+  geom_line (aes(colour = pais_region), size = 0.8)  +
+    scale_y_continuous(limits= c(40, 95))+
+  labs(title = "Variación del porcentaje de la fuerza laboral femenina 
+        que trabaja en servicios, entre 1998 y 2018, 
+             para cada pais del Mercosur",
+       x = "Año",
+       y = "Porcentaje(%)") +
+theme_minimal() +
+  theme (axis.text.x= element_text(  angle= 90, hjust= 1),
+         legend.title = element_text(color ="white"))
+```
+
 
