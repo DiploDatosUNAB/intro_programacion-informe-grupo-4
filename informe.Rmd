@@ -142,16 +142,29 @@ empleo_genero_ordenado|> filter(pais_region !="Latin America & Caribbean" & pais
 
 \* Para responder esta pregunta comenzamos filtrando los datos existentes para las variables a analizar, en los paises del mercosur dentro de los años que van de 1998 en adelante.
 
+\*FILTRO PARA VER LA PARTICIPACIÓN POR GENERO EN EL SECTOR INDUSTRIAL
+
 ```{r}
-empleo_mercosur <- select(empleo_genero_ordenado, pais_region, Anio, empleo_industria_mujeres, empleo_industria_hombres) |>
-  filter(pais_region == "Argentina" | pais_region == "Uruguay" | pais_region == "Paraguay" | pais_region == "Brasil" | pais_region == "Venezuela" | pais_region == "Bolivia") |> 
+empleo_industria_mercosur <- select(empleo_genero_ordenado, pais_region, Anio, empleo_industria_mujeres, empleo_industria_hombres) |>
+  filter(pais_region %in% c("Argentina", "Uruguay", "Paraguay", "Brasil", "Venezuela", "Bolivia" ))|> 
   filter (Anio >= 1998)
 ```
 
-\* Luego filtramos los datos disponibles para 2018 y graficamos como se comportan ambas variables en los distintos paises en dicho año.
+\*FILTRO PARA VER LA PARTICIPACIÓN POR GENERO EN EL SECTOR SERVICIOS
 
 ```{r}
-industria_2018 <- select(empleo_mercosur, pais_region, Anio, empleo_industria_mujeres, empleo_industria_hombres)|>
+empleo_servicios_mercosur <- select(empleo_genero_ordenado, pais_region, Anio, empleo_servicios_mujeres, empleo_servicios_hombres) |>
+  filter(pais_region %in% c("Argentina", "Uruguay", "Paraguay", "Brasil", "Venezuela", "Bolivia" ))|> 
+  filter (Anio >= 1998)
+```
+
+
+
+\* Luego ordenamos la tabla, filtramos los datos disponibles para 2018 y graficamos como se comportan las variables en los distintos paises en dicho año.
+
+```{r}
+industria_2018 <- select(empleo_genero_ordenado, pais_region, Anio, empleo_industria_mujeres, empleo_industria_hombres)|>
+  filter(pais_region %in% c("Argentina", "Uruguay", "Paraguay", "Brasil", "Venezuela", "Bolivia" ))|>
   filter(Anio == 2018) |> 
   pivot_longer(cols =c("empleo_industria_hombres","empleo_industria_mujeres"),
                names_to = "industria_x_genero",  
@@ -170,9 +183,30 @@ ggplot(industria_2018, aes(x=pais_region,y=valor, fill=industria_x_genero))+
   theme_minimal()
   
 ```
+```{r}
+servicios_2018 <- select(empleo_genero_ordenado, pais_region, Anio, empleo_servicios_mujeres, empleo_servicios_hombres)|>
+  filter(pais_region %in% c("Argentina", "Uruguay", "Paraguay", "Brasil", "Venezuela", "Bolivia" ))|>
+  filter(Anio == 2018) |> 
+  pivot_longer(cols =c("empleo_servicios_hombres","empleo_servicios_mujeres"),
+               names_to = "servicios_x_genero",  
+               values_to = "valor")
+```
 
-\*Del grafico presentado podemos leer que nuestra hipotesis se confirma: el peso del sector industrial como empleador de la fuerza laboral masculina en los paises del Mercosur es mucho mayor que en el caso de la fuerza laboral femenina. Entendemos que esto se debe al fenomeno llamado "segmentación vertical". Es decir, el hecho de que existan actividades economicas que emplean mayormente a varones, denominadas "masculinizadas" y actividades que emplean mayormente a mujeres, denominadas "feminizadas". 
-Esta inserción laboral diferenciada se debe a los estereotipos de género, los cuales determinan que haya ciertos trabajos considerados para mujeres y otros para varones. En este caso, por ser la industria un trabajo asociado socialmente a los varones, es una actividad altamente masculinizada y por lo tanto las mujeres tienen un acceso mucho menor.
+```{r}
+ggplot(servicios_2018, aes(x=pais_region,y=valor, fill=servicios_x_genero))+
+  geom_col(position = "dodge") +
+  ggtitle ("Brecha de acceso al empleo en el sector servicios - año 2018") + 
+  labs(x = "Paises Mercosur",y = "Porcentaje dentro de la fuerza laboral") + 
+  geom_text(aes(label = round(valor, digits = 1)),
+    position = position_dodge(0.9),
+    vjust = -0.5)+
+  theme_minimal()
+  
+```
+
+
+\*Del grafico presentado podemos leer que nuestra hipotesis se confirma: el peso del sector industrial como empleador de la fuerza laboral masculina en los paises del Mercosur es mucho mayor que en el caso de la fuerza laboral femenina. Lo contrario ocurre al analizar el sector servicios. Entendemos que esto se debe al fenomeno llamado "segmentación vertical". Es decir, el hecho de que existan actividades economicas que emplean mayormente a varones, denominadas "masculinizadas" y actividades que emplean mayormente a mujeres, denominadas "feminizadas". 
+Esta inserción laboral diferenciada se debe a los estereotipos de género, los cuales determinan que haya ciertos trabajos considerados para mujeres y otros para varones. En este caso, por ser la industria un trabajo asociado socialmente a los varones, es una actividad altamente masculinizada y por lo tanto las mujeres tienen un acceso mucho menor. 
 
 
 ### Hipotesis 2
@@ -199,8 +233,9 @@ industria_1998_2018 |>
 mutate(Anio=as.character(Anio)) |>
 ggplot(aes(x=pais_region,y=empleo_industria_mujeres, fill=Anio))+
   geom_col(position = "dodge") +
-  ggtitle ("Variación del porcentaje de la fuerza laboral femenina 
-      que trabaja en la industria, entre 1998 y 2018, 
+  scale_fill_manual(values = c("1998" = "#FFDAB9", "2018" = "#41B7C4")) +
+  ggtitle ("  Variación del porcentaje de la fuerza laboral femenina 
+        que trabaja en la industria, entre 1998 y 2018, 
              para cada pais del Mercosur") + 
   labs(x = "Paises Mercosur",y = "Porcentaje (%)") +
   geom_text(aes(label = round(empleo_industria_mujeres, digits = 1)),
