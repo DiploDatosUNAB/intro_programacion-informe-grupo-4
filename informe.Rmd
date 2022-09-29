@@ -1,7 +1,9 @@
 ---
 title: "Empleo y Género"
 author: "Maria Florencia Aguilera y Rocío Ospitaleche"
-output: html_document
+output:
+  html_document:
+    code_folding: hide
 ---
 
 ## Introducción
@@ -11,7 +13,7 @@ En el presente informe se utilizan datos sobre empleo- desempleo y género prove
 Fuente de los datos: Extraídos y traducidos del sitio web del [Banco Mundial](https://databank.worldbank.org/source/gender-statistics).
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE )
 library(tidyr)
 library(readr)
 library(dplyr)
