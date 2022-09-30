@@ -18,6 +18,7 @@ library(tidyr)
 library(readr)
 library(dplyr)
 library(ggplot2)
+library(gt)
 ```
 
 ## Exploración de los datos
@@ -130,8 +131,10 @@ empleo_genero_ordenado|> filter(pais_region %in% c("Latin America & Caribbean", 
 
 -   En los países de América Latina y el Caribe en el año 2018, el promedio del porcentaje de mujeres dentro de la fuerza laboral femenina trabajadoras por cuenta propia es de 30,00 con un desvío estándar de 16,40 (valor máx: 84,92 y valor mín: 5,49). Mientras que el promedio del porcentaje de hombres dentro de la fuerza laboral masculina trabajadores por cuenta propia es de 30,61 con un desvío estándar de 15,24 (valor máx: 80,95 y valor mín: 8,38).
 
-### Hipótesis
 
+Cabe mencionar que luego de la exploracion de los datos definimos trabajar con nuevas variables para construir las hipotesis: nos concentraremos ahora en conocer la insercion laboral diferenciada por genero en el Mercosur observando el sector industrial y de servicios.
+
+### Hipótesis
 -Existe una segmentacion horizontal en el mercado de trabajo de los paises del Mercosur por la cual las mujeres acceden en menor medida a empleos en la industria y en mayor medida en el sector servicios.
 
 -¿Se acortó esta brecha de acceso a empleos en la industria en los ultimos 20 años?
@@ -139,7 +142,7 @@ empleo_genero_ordenado|> filter(pais_region %in% c("Latin America & Caribbean", 
 A continuación, nos proponemos responder y graficar algunas de las preguntas formuladas y llegar a una conclusión a traves del analisis de los datos.
 
 ### Hipótesis 1
-Existe una segmentacion horizontal en el mercado de trabajo en los paises del mercosur por la cual las mujeres acceden en menor medida a empleos en la industria y en mayor medida a empleos en servicios.
+-   Existe una segmentacion horizontal en el mercado de trabajo en los paises del mercosur por la cual las mujeres acceden en menor medida a empleos en la industria y en mayor medida a empleos en servicios.
 
 Para responder esta pregunta comenzamos filtrando los datos existentes para las variables a analizar, en los paises del mercosur dentro de los años que van de 1998 en adelante.
 
@@ -151,7 +154,7 @@ empleo_mercosur <- select(empleo_genero_ordenado, pais_region, Anio, empleo_indu
 ```
 
 
-\* Luego ordenamos la tabla, filtramos los datos disponibles para 2018 y graficamos como se comportan las variables en los distintos paises en dicho año.
+- Luego ordenamos la tabla, filtramos los datos disponibles para 2018 y graficamos como se comportan las variables en los distintos paises en dicho año.
 
 ```{r}
 industria_2018 <- select(empleo_mercosur, pais_region, Anio, empleo_industria_mujeres, empleo_industria_hombres)|>
@@ -196,34 +199,56 @@ ggplot(servicios_2018, aes(x=pais_region,y=valor, fill=servicios_x_genero))+
 ```
 
 
-\*Del grafico presentado podemos leer que nuestra hipotesis se confirma: el peso del sector industrial como empleador de la fuerza laboral masculina en los paises del Mercosur es mucho mayor que en el caso de la fuerza laboral femenina. Por otro lado, al analizar el sector servicios las variables se comportan de forma inversa, es decir que el dicho sector emplea en mayor proporcion a mujeres. 
+Del grafico presentado podemos leer que nuestra hipotesis se confirma: el peso del sector industrial como empleador de la fuerza laboral masculina en los paises del Mercosur es mucho mayor que en el caso de la fuerza laboral femenina. Por otro lado, al analizar el sector servicios las variables se comportan de forma inversa, es decir que el dicho sector emplea en mayor proporcion a mujeres. 
 Entendemos que esto se debe al fenomeno llamado "segmentación vertical". Es decir, el hecho de que existan actividades economicas que emplean mayormente a varones, denominadas "masculinizadas" y actividades que emplean mayormente a mujeres, denominadas "feminizadas". 
 Esta inserción laboral diferenciada se debe a los estereotipos de género, los cuales determinan que haya ciertos trabajos considerados para mujeres y otros para varones. En este caso, por ser la industria un trabajo asociado socialmente a los varones, es una actividad altamente masculinizada y por lo tanto las mujeres tienen un acceso mucho menor. 
 
 
 ### Hipotesis 2
-\*¿Se vio un incremento del peso de la industria como sector empleador de la fuerza laboral de mujeres en los ultimos 20 años en los paises del Mercosur?
 
+-   ¿Se vio un incremento del peso de la industria como sector empleador de la fuerza laboral de mujeres en los ultimos 20 años en los paises del Mercosur?
 
-\*Para contestar nuestra segunda pregunta queremos ver especificamente que sucede en los años de los extremos con respecto a la variable que mide el porcentaje de mujeres que son empleadas en la industria y en servicios, dentro del total de la fuerza de trabajo de mujeres del pais. El objetivo es poder comparar el comportamiento de dicha variable entre los años 1998 y 2018 y luego graficar la variacion durante todos los años para verificar si hubo una reduccion o ampliacion del acceso al empleo industrial y de servicios por parte de mujeres y por lo tanto confirmar si el fenomeno que afirmamos en la hipotesis anterior se sostuvo, disminuyo o se proofundizó. 
+Para contestar nuestra segunda pregunta queremos ver especificamente que sucede en los años de los extremos con respecto a la variable que mide el porcentaje de mujeres que son empleadas en la industria y en servicios, dentro del total de la fuerza de trabajo de mujeres del pais. El objetivo es poder comparar el comportamiento de dicha variable entre los años 1998 y 2018 y luego graficar la variacion durante todos los años para verificar si hubo una reduccion o ampliacion del acceso al empleo industrial y de servicios por parte de mujeres y por lo tanto confirmar si el fenomeno que afirmamos en la hipotesis anterior se sostuvo, disminuyo o se proofundizó. 
 
--Comenzaremos calculando la variación entre puntas para ambos sectores con el fin de verificar si es negativa o positiva.
+- Comenzaremos calculando la variación entre puntas para ambos sectores con el fin de verificar si es negativa o positiva.
 
 ```{r}
 variacion_industria_mujeres <- select(empleo_genero, variable, pais_region, "1998", "2018")|>
   filter(pais_region %in% c("Argentina", "Uruguay", "Paraguay", "Brasil", "Venezuela", "Bolivia" )) |>
   filter(variable == "empleo_industria_mujeres")|>
-  mutate(variacion=`2018`-`1998`)
+  mutate(variacion =`2018`-`1998`)
+```
+
+```{r}
+variacion_industria_mujeres %>%
+  group_by(pais_region) %>% 
+  gt(caption = "Porcentaje de la fuerza laboral femenina empleada en el sector industrial") %>% 
+  tab_header(title = "Variación entre 1998 y 2018") %>%
+  cols_label(variacion = "Variación en p.p", variable = "Variable por País") %>%
+  fmt_number(columns = variacion, decimals = 1, dec_mark = ",")
 ```
 
 ```{r}
 variacion_servicios_mujeres <- select(empleo_genero, variable, pais_region, "1998", "2018")|>
   filter(pais_region %in% c("Argentina", "Uruguay", "Paraguay", "Brasil", "Venezuela", "Bolivia" )) |>
   filter(variable == "empleo_servicios_mujeres")|>
-  mutate(variacion=`2018`-`1998`)
+  mutate(variacion =`2018`-`1998`)
+
 ```
 
-##A continuacion presentaremos la variacion entre puntas y la variacion en toda la serie para exponer la evolucion a lo largo del tiempo
+
+```{r}
+variacion_servicios_mujeres %>%
+  group_by(pais_region) %>% 
+  gt(caption = "Porcentaje de la fuerza laboral femenina empleada en el sector servicios") %>% 
+  tab_header(title = "Variación entre 1998 y 2018") %>%
+  cols_label(variacion = "Variación en p.p", variable = "Variable por País") %>%
+  fmt_number(columns = Variación, decimals = 1, dec_mark = ",")
+```
+  
+  
+## A continuacion presentaremos la variacion entre puntas y la variacion en toda la serie para exponer la evolucion a lo largo del tiempo
+
 ```{r}
 industria_1998_2018 <- select(empleo_mercosur, pais_region, Anio, empleo_industria_mujeres)|>
   filter(Anio == 1998 | Anio == 2018) 
@@ -297,7 +322,8 @@ theme_minimal() +
 
          
          
-##Conclusión
+## Conclusión
+
 \*A partir de la lectura del grafico podemos concluir que en el periodo 1998 - 2018 no solo no creció el acceso de las mujeres a empleos en la industria sino que disminuyó. La tasa de variacion en todos los paises es negativa, lo cual nos muestra que el porcentaje de mujeres que tienen empleos dentro del sector industrial se redujo entre los años mencionados.
 A su vez, lo contrario sucede con los empleos en el sector servicios, en el cual la tasa de variación es positiva, en decir que las mujeres han aumentado su participacion en los ultimos 20 años.
 Como ya mencionamos, entendemos que esto se debe a estereotipos que sostienen una division sexual del trabajo y determinan desigualdades estructurales segun genero en el acceso al empleo.
