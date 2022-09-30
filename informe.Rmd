@@ -144,7 +144,7 @@ A continuación, nos proponemos responder y graficar algunas de las preguntas fo
 ### Hipótesis 1
 -   Existe una segmentacion horizontal en el mercado de trabajo en los paises del mercosur por la cual las mujeres acceden en menor medida a empleos en la industria y en mayor medida a empleos en servicios.
 
-Para responder esta pregunta comenzamos filtrando los datos existentes para las variables a analizar, en los paises del mercosur dentro de los años que van de 1998 en adelante.
+-Para responder esta pregunta comenzamos filtrando los datos existentes para las variables a analizar, en los paises del mercosur dentro de los años que van de 1998 en adelante.
 
 
 ```{r}
@@ -153,8 +153,7 @@ empleo_mercosur <- select(empleo_genero_ordenado, pais_region, Anio, empleo_indu
   filter (Anio >= 1998)
 ```
 
-
-- Luego ordenamos la tabla, filtramos los datos disponibles para 2018 y graficamos como se comportan las variables en los distintos paises en dicho año.
+-Luego ordenamos la tabla, filtramos los datos disponibles para 2018 y graficamos como se comportan las variables en los distintos paises en dicho año.
 
 ```{r}
 industria_2018 <- select(empleo_mercosur, pais_region, Anio, empleo_industria_mujeres, empleo_industria_hombres)|>
@@ -210,7 +209,7 @@ Esta inserción laboral diferenciada se debe a los estereotipos de género, los 
 
 Para contestar nuestra segunda pregunta queremos ver especificamente que sucede en los años de los extremos con respecto a la variable que mide el porcentaje de mujeres que son empleadas en la industria y en servicios, dentro del total de la fuerza de trabajo de mujeres del pais. El objetivo es poder comparar el comportamiento de dicha variable entre los años 1998 y 2018 y luego graficar la variacion durante todos los años para verificar si hubo una reduccion o ampliacion del acceso al empleo industrial y de servicios por parte de mujeres y por lo tanto confirmar si el fenomeno que afirmamos en la hipotesis anterior se sostuvo, disminuyo o se proofundizó. 
 
-- Comenzaremos calculando la variación entre puntas para ambos sectores con el fin de verificar si es negativa o positiva.
+-Comenzaremos calculando la variación entre puntas para ambos sectores con el fin de verificar si es negativa o positiva.
 
 ```{r}
 variacion_industria_mujeres <- select(empleo_genero, variable, pais_region, "1998", "2018")|>
@@ -243,11 +242,13 @@ variacion_servicios_mujeres %>%
   gt(caption = "Porcentaje de la fuerza laboral femenina empleada en el sector servicios") %>% 
   tab_header(title = "Variación entre 1998 y 2018") %>%
   cols_label(variacion = "Variación en p.p", variable = "Variable por País") %>%
-  fmt_number(columns = Variación, decimals = 1, dec_mark = ",")
+  fmt_number(columns = variacion, decimals = 1, dec_mark = ",")
 ```
   
   
-## A continuacion presentaremos la variacion entre puntas y la variacion en toda la serie para exponer la evolucion a lo largo del tiempo
+## Presentación grafica de la variación
+
+A continuacion presentaremos graficamente la variacion entre puntas y la variacion en toda la serie para exponer la evolucion a lo largo del tiempo
 
 ```{r}
 industria_1998_2018 <- select(empleo_mercosur, pais_region, Anio, empleo_industria_mujeres)|>
