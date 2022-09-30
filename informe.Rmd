@@ -244,8 +244,9 @@ variacion_servicios_mujeres %>%
   cols_label(variacion = "Variación en p.p", variable = "Variable por País") %>%
   fmt_number(columns = variacion, decimals = 1, dec_mark = ",")
 ```
-  
-  
+Como podemos ver en ambas tablas, la variación es negativa en el caso del acceso de mujeres al empleo en la industria y positiva en el caso del acceso al sector servicios es decir que el fenomeno descripto anteriormente se profundizó.
+
+
 ## Presentación grafica de la variación
 
 A continuacion presentaremos graficamente la variacion entre puntas y la variacion en toda la serie para exponer la evolucion a lo largo del tiempo

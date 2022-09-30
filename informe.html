@@ -724,17 +724,15 @@ los datos.</p>
 paises del mercosur por la cual las mujeres acceden en menor medida a
 empleos en la industria y en mayor medida a empleos en servicios.</li>
 </ul>
-<p>Para responder esta pregunta comenzamos filtrando los datos
+<p>-Para responder esta pregunta comenzamos filtrando los datos
 existentes para las variables a analizar, en los paises del mercosur
 dentro de los años que van de 1998 en adelante.</p>
 <pre class="r"><code>empleo_mercosur &lt;- select(empleo_genero_ordenado, pais_region, Anio, empleo_industria_mujeres, empleo_industria_hombres, empleo_servicios_mujeres, empleo_servicios_hombres) |&gt;
   filter(pais_region %in% c(&quot;Argentina&quot;, &quot;Uruguay&quot;, &quot;Paraguay&quot;, &quot;Brasil&quot;, &quot;Venezuela&quot;, &quot;Bolivia&quot; ))|&gt; 
   filter (Anio &gt;= 1998)</code></pre>
-<ul>
-<li>Luego ordenamos la tabla, filtramos los datos disponibles para 2018
+<p>-Luego ordenamos la tabla, filtramos los datos disponibles para 2018
 y graficamos como se comportan las variables en los distintos paises en
-dicho año.</li>
-</ul>
+dicho año.</p>
 <pre class="r"><code>industria_2018 &lt;- select(empleo_mercosur, pais_region, Anio, empleo_industria_mujeres, empleo_industria_hombres)|&gt;
   filter(pais_region %in% c(&quot;Argentina&quot;, &quot;Uruguay&quot;, &quot;Paraguay&quot;, &quot;Brasil&quot;, &quot;Venezuela&quot;, &quot;Bolivia&quot; ))|&gt;
   filter(Anio == 2018) |&gt; 
@@ -798,10 +796,8 @@ años para verificar si hubo una reduccion o ampliacion del acceso al
 empleo industrial y de servicios por parte de mujeres y por lo tanto
 confirmar si el fenomeno que afirmamos en la hipotesis anterior se
 sostuvo, disminuyo o se proofundizó.</p>
-<ul>
-<li>Comenzaremos calculando la variación entre puntas para ambos
-sectores con el fin de verificar si es negativa o positiva.</li>
-</ul>
+<p>-Comenzaremos calculando la variación entre puntas para ambos
+sectores con el fin de verificar si es negativa o positiva.</p>
 <pre class="r"><code>variacion_industria_mujeres &lt;- select(empleo_genero, variable, pais_region, &quot;1998&quot;, &quot;2018&quot;)|&gt;
   filter(pais_region %in% c(&quot;Argentina&quot;, &quot;Uruguay&quot;, &quot;Paraguay&quot;, &quot;Brasil&quot;, &quot;Venezuela&quot;, &quot;Bolivia&quot; )) |&gt;
   filter(variable == &quot;empleo_industria_mujeres&quot;)|&gt;
@@ -812,12 +808,12 @@ sectores con el fin de verificar si es negativa o positiva.</li>
   tab_header(title = &quot;Variación entre 1998 y 2018&quot;) %&gt;%
   cols_label(variacion = &quot;Variación en p.p&quot;, variable = &quot;Variable por País&quot;) %&gt;%
   fmt_number(columns = variacion, decimals = 1, dec_mark = &quot;,&quot;)</code></pre>
-<div id="cbdqmermvg" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="ojgisakdph" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#cbdqmermvg .gt_table {
+#ojgisakdph .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -842,7 +838,7 @@ sectores con el fin de verificar si es negativa o positiva.</li>
   border-left-color: #D3D3D3;
 }
 
-#cbdqmermvg .gt_heading {
+#ojgisakdph .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -854,7 +850,7 @@ sectores con el fin de verificar si es negativa o positiva.</li>
   border-right-color: #D3D3D3;
 }
 
-#cbdqmermvg .gt_title {
+#ojgisakdph .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -866,7 +862,7 @@ sectores con el fin de verificar si es negativa o positiva.</li>
   border-bottom-width: 0;
 }
 
-#cbdqmermvg .gt_subtitle {
+#ojgisakdph .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -878,13 +874,13 @@ sectores con el fin de verificar si es negativa o positiva.</li>
   border-top-width: 0;
 }
 
-#cbdqmermvg .gt_bottom_border {
+#ojgisakdph .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#cbdqmermvg .gt_col_headings {
+#ojgisakdph .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -899,7 +895,7 @@ sectores con el fin de verificar si es negativa o positiva.</li>
   border-right-color: #D3D3D3;
 }
 
-#cbdqmermvg .gt_col_heading {
+#ojgisakdph .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -919,7 +915,7 @@ sectores con el fin de verificar si es negativa o positiva.</li>
   overflow-x: hidden;
 }
 
-#cbdqmermvg .gt_column_spanner_outer {
+#ojgisakdph .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -931,15 +927,15 @@ sectores con el fin de verificar si es negativa o positiva.</li>
   padding-right: 4px;
 }
 
-#cbdqmermvg .gt_column_spanner_outer:first-child {
+#ojgisakdph .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#cbdqmermvg .gt_column_spanner_outer:last-child {
+#ojgisakdph .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#cbdqmermvg .gt_column_spanner {
+#ojgisakdph .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -951,7 +947,7 @@ sectores con el fin de verificar si es negativa o positiva.</li>
   width: 100%;
 }
 
-#cbdqmermvg .gt_group_heading {
+#ojgisakdph .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -976,7 +972,7 @@ sectores con el fin de verificar si es negativa o positiva.</li>
   vertical-align: middle;
 }
 
-#cbdqmermvg .gt_empty_group_heading {
+#ojgisakdph .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -991,15 +987,15 @@ sectores con el fin de verificar si es negativa o positiva.</li>
   vertical-align: middle;
 }
 
-#cbdqmermvg .gt_from_md > :first-child {
+#ojgisakdph .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#cbdqmermvg .gt_from_md > :last-child {
+#ojgisakdph .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#cbdqmermvg .gt_row {
+#ojgisakdph .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1018,7 +1014,7 @@ sectores con el fin de verificar si es negativa o positiva.</li>
   overflow-x: hidden;
 }
 
-#cbdqmermvg .gt_stub {
+#ojgisakdph .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1031,7 +1027,7 @@ sectores con el fin de verificar si es negativa o positiva.</li>
   padding-right: 5px;
 }
 
-#cbdqmermvg .gt_stub_row_group {
+#ojgisakdph .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1045,11 +1041,11 @@ sectores con el fin de verificar si es negativa o positiva.</li>
   vertical-align: top;
 }
 
-#cbdqmermvg .gt_row_group_first td {
+#ojgisakdph .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#cbdqmermvg .gt_summary_row {
+#ojgisakdph .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1059,16 +1055,16 @@ sectores con el fin de verificar si es negativa o positiva.</li>
   padding-right: 5px;
 }
 
-#cbdqmermvg .gt_first_summary_row {
+#ojgisakdph .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#cbdqmermvg .gt_first_summary_row.thick {
+#ojgisakdph .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#cbdqmermvg .gt_last_summary_row {
+#ojgisakdph .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1078,7 +1074,7 @@ sectores con el fin de verificar si es negativa o positiva.</li>
   border-bottom-color: #D3D3D3;
 }
 
-#cbdqmermvg .gt_grand_summary_row {
+#ojgisakdph .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1088,7 +1084,7 @@ sectores con el fin de verificar si es negativa o positiva.</li>
   padding-right: 5px;
 }
 
-#cbdqmermvg .gt_first_grand_summary_row {
+#ojgisakdph .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1098,11 +1094,11 @@ sectores con el fin de verificar si es negativa o positiva.</li>
   border-top-color: #D3D3D3;
 }
 
-#cbdqmermvg .gt_striped {
+#ojgisakdph .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#cbdqmermvg .gt_table_body {
+#ojgisakdph .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1111,7 +1107,7 @@ sectores con el fin de verificar si es negativa o positiva.</li>
   border-bottom-color: #D3D3D3;
 }
 
-#cbdqmermvg .gt_footnotes {
+#ojgisakdph .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1125,7 +1121,7 @@ sectores con el fin de verificar si es negativa o positiva.</li>
   border-right-color: #D3D3D3;
 }
 
-#cbdqmermvg .gt_footnote {
+#ojgisakdph .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -1134,7 +1130,7 @@ sectores con el fin de verificar si es negativa o positiva.</li>
   padding-right: 5px;
 }
 
-#cbdqmermvg .gt_sourcenotes {
+#ojgisakdph .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1148,7 +1144,7 @@ sectores con el fin de verificar si es negativa o positiva.</li>
   border-right-color: #D3D3D3;
 }
 
-#cbdqmermvg .gt_sourcenote {
+#ojgisakdph .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1156,64 +1152,64 @@ sectores con el fin de verificar si es negativa o positiva.</li>
   padding-right: 5px;
 }
 
-#cbdqmermvg .gt_left {
+#ojgisakdph .gt_left {
   text-align: left;
 }
 
-#cbdqmermvg .gt_center {
+#ojgisakdph .gt_center {
   text-align: center;
 }
 
-#cbdqmermvg .gt_right {
+#ojgisakdph .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#cbdqmermvg .gt_font_normal {
+#ojgisakdph .gt_font_normal {
   font-weight: normal;
 }
 
-#cbdqmermvg .gt_font_bold {
+#ojgisakdph .gt_font_bold {
   font-weight: bold;
 }
 
-#cbdqmermvg .gt_font_italic {
+#ojgisakdph .gt_font_italic {
   font-style: italic;
 }
 
-#cbdqmermvg .gt_super {
+#ojgisakdph .gt_super {
   font-size: 65%;
 }
 
-#cbdqmermvg .gt_footnote_marks {
+#ojgisakdph .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#cbdqmermvg .gt_asterisk {
+#ojgisakdph .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#cbdqmermvg .gt_indent_1 {
+#ojgisakdph .gt_indent_1 {
   text-indent: 5px;
 }
 
-#cbdqmermvg .gt_indent_2 {
+#ojgisakdph .gt_indent_2 {
   text-indent: 10px;
 }
 
-#cbdqmermvg .gt_indent_3 {
+#ojgisakdph .gt_indent_3 {
   text-indent: 15px;
 }
 
-#cbdqmermvg .gt_indent_4 {
+#ojgisakdph .gt_indent_4 {
   text-indent: 20px;
 }
 
-#cbdqmermvg .gt_indent_5 {
+#ojgisakdph .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -1291,12 +1287,12 @@ sectores con el fin de verificar si es negativa o positiva.</li>
   tab_header(title = &quot;Variación entre 1998 y 2018&quot;) %&gt;%
   cols_label(variacion = &quot;Variación en p.p&quot;, variable = &quot;Variable por País&quot;) %&gt;%
   fmt_number(columns = variacion, decimals = 1, dec_mark = &quot;,&quot;)</code></pre>
-<div id="upofssdezy" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="tultuccukm" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#upofssdezy .gt_table {
+#tultuccukm .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -1321,7 +1317,7 @@ sectores con el fin de verificar si es negativa o positiva.</li>
   border-left-color: #D3D3D3;
 }
 
-#upofssdezy .gt_heading {
+#tultuccukm .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1333,7 +1329,7 @@ sectores con el fin de verificar si es negativa o positiva.</li>
   border-right-color: #D3D3D3;
 }
 
-#upofssdezy .gt_title {
+#tultuccukm .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1345,7 +1341,7 @@ sectores con el fin de verificar si es negativa o positiva.</li>
   border-bottom-width: 0;
 }
 
-#upofssdezy .gt_subtitle {
+#tultuccukm .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1357,13 +1353,13 @@ sectores con el fin de verificar si es negativa o positiva.</li>
   border-top-width: 0;
 }
 
-#upofssdezy .gt_bottom_border {
+#tultuccukm .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#upofssdezy .gt_col_headings {
+#tultuccukm .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1378,7 +1374,7 @@ sectores con el fin de verificar si es negativa o positiva.</li>
   border-right-color: #D3D3D3;
 }
 
-#upofssdezy .gt_col_heading {
+#tultuccukm .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1398,7 +1394,7 @@ sectores con el fin de verificar si es negativa o positiva.</li>
   overflow-x: hidden;
 }
 
-#upofssdezy .gt_column_spanner_outer {
+#tultuccukm .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1410,15 +1406,15 @@ sectores con el fin de verificar si es negativa o positiva.</li>
   padding-right: 4px;
 }
 
-#upofssdezy .gt_column_spanner_outer:first-child {
+#tultuccukm .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#upofssdezy .gt_column_spanner_outer:last-child {
+#tultuccukm .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#upofssdezy .gt_column_spanner {
+#tultuccukm .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1430,7 +1426,7 @@ sectores con el fin de verificar si es negativa o positiva.</li>
   width: 100%;
 }
 
-#upofssdezy .gt_group_heading {
+#tultuccukm .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1455,7 +1451,7 @@ sectores con el fin de verificar si es negativa o positiva.</li>
   vertical-align: middle;
 }
 
-#upofssdezy .gt_empty_group_heading {
+#tultuccukm .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1470,15 +1466,15 @@ sectores con el fin de verificar si es negativa o positiva.</li>
   vertical-align: middle;
 }
 
-#upofssdezy .gt_from_md > :first-child {
+#tultuccukm .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#upofssdezy .gt_from_md > :last-child {
+#tultuccukm .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#upofssdezy .gt_row {
+#tultuccukm .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1497,7 +1493,7 @@ sectores con el fin de verificar si es negativa o positiva.</li>
   overflow-x: hidden;
 }
 
-#upofssdezy .gt_stub {
+#tultuccukm .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1510,7 +1506,7 @@ sectores con el fin de verificar si es negativa o positiva.</li>
   padding-right: 5px;
 }
 
-#upofssdezy .gt_stub_row_group {
+#tultuccukm .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1524,11 +1520,11 @@ sectores con el fin de verificar si es negativa o positiva.</li>
   vertical-align: top;
 }
 
-#upofssdezy .gt_row_group_first td {
+#tultuccukm .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#upofssdezy .gt_summary_row {
+#tultuccukm .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1538,16 +1534,16 @@ sectores con el fin de verificar si es negativa o positiva.</li>
   padding-right: 5px;
 }
 
-#upofssdezy .gt_first_summary_row {
+#tultuccukm .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#upofssdezy .gt_first_summary_row.thick {
+#tultuccukm .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#upofssdezy .gt_last_summary_row {
+#tultuccukm .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1557,7 +1553,7 @@ sectores con el fin de verificar si es negativa o positiva.</li>
   border-bottom-color: #D3D3D3;
 }
 
-#upofssdezy .gt_grand_summary_row {
+#tultuccukm .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1567,7 +1563,7 @@ sectores con el fin de verificar si es negativa o positiva.</li>
   padding-right: 5px;
 }
 
-#upofssdezy .gt_first_grand_summary_row {
+#tultuccukm .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1577,11 +1573,11 @@ sectores con el fin de verificar si es negativa o positiva.</li>
   border-top-color: #D3D3D3;
 }
 
-#upofssdezy .gt_striped {
+#tultuccukm .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#upofssdezy .gt_table_body {
+#tultuccukm .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1590,7 +1586,7 @@ sectores con el fin de verificar si es negativa o positiva.</li>
   border-bottom-color: #D3D3D3;
 }
 
-#upofssdezy .gt_footnotes {
+#tultuccukm .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1604,7 +1600,7 @@ sectores con el fin de verificar si es negativa o positiva.</li>
   border-right-color: #D3D3D3;
 }
 
-#upofssdezy .gt_footnote {
+#tultuccukm .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -1613,7 +1609,7 @@ sectores con el fin de verificar si es negativa o positiva.</li>
   padding-right: 5px;
 }
 
-#upofssdezy .gt_sourcenotes {
+#tultuccukm .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1627,7 +1623,7 @@ sectores con el fin de verificar si es negativa o positiva.</li>
   border-right-color: #D3D3D3;
 }
 
-#upofssdezy .gt_sourcenote {
+#tultuccukm .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1635,64 +1631,64 @@ sectores con el fin de verificar si es negativa o positiva.</li>
   padding-right: 5px;
 }
 
-#upofssdezy .gt_left {
+#tultuccukm .gt_left {
   text-align: left;
 }
 
-#upofssdezy .gt_center {
+#tultuccukm .gt_center {
   text-align: center;
 }
 
-#upofssdezy .gt_right {
+#tultuccukm .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#upofssdezy .gt_font_normal {
+#tultuccukm .gt_font_normal {
   font-weight: normal;
 }
 
-#upofssdezy .gt_font_bold {
+#tultuccukm .gt_font_bold {
   font-weight: bold;
 }
 
-#upofssdezy .gt_font_italic {
+#tultuccukm .gt_font_italic {
   font-style: italic;
 }
 
-#upofssdezy .gt_super {
+#tultuccukm .gt_super {
   font-size: 65%;
 }
 
-#upofssdezy .gt_footnote_marks {
+#tultuccukm .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#upofssdezy .gt_asterisk {
+#tultuccukm .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#upofssdezy .gt_indent_1 {
+#tultuccukm .gt_indent_1 {
   text-indent: 5px;
 }
 
-#upofssdezy .gt_indent_2 {
+#tultuccukm .gt_indent_2 {
   text-indent: 10px;
 }
 
-#upofssdezy .gt_indent_3 {
+#tultuccukm .gt_indent_3 {
   text-indent: 15px;
 }
 
-#upofssdezy .gt_indent_4 {
+#tultuccukm .gt_indent_4 {
   text-indent: 20px;
 }
 
-#upofssdezy .gt_indent_5 {
+#tultuccukm .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -1762,10 +1758,11 @@ sectores con el fin de verificar si es negativa o positiva.</li>
 </div>
 </div>
 </div>
-<div id="a-continuacion-presentaremos-la-variacion-entre-puntas-y-la-variacion-en-toda-la-serie-para-exponer-la-evolucion-a-lo-largo-del-tiempo" class="section level2">
-<h2>A continuacion presentaremos la variacion entre puntas y la
-variacion en toda la serie para exponer la evolucion a lo largo del
-tiempo</h2>
+<div id="presentación-grafica-de-la-variación" class="section level2">
+<h2>Presentación grafica de la variación</h2>
+<p>A continuacion presentaremos graficamente la variacion entre puntas y
+la variacion en toda la serie para exponer la evolucion a lo largo del
+tiempo</p>
 <pre class="r"><code>industria_1998_2018 &lt;- select(empleo_mercosur, pais_region, Anio, empleo_industria_mujeres)|&gt;
   filter(Anio == 1998 | Anio == 2018) </code></pre>
 <pre class="r"><code>industria_1998_2018 |&gt;
