@@ -41,6 +41,7 @@ empleo_genero_largo <- pivot_longer(empleo_genero,
 ```{r}
 empleo_genero_largo
 ```
+Si bien en las primeras 10 filas podemos obervar que no existen datos en la columna "valor" (NA) esto se debe a que el set de datos original no cuenta con datos para los primeros 20 años. Sin embargo, esto no afectará nuestro trabajo ya que tomaremos en cuenta las variables y datos correspondientes a los últimos 20 años que si tienen valores válidos.
 
 Luego utilizamos la función "pivot_wider" para reordenar las variables que aparecían en la primera columna bajo la etiqueta "variable" y las ubicamos en distintas columnas. Y asignamos la nueva tabla a la variable "empleo_genero_ordenado", que es con la que vamos a trabajar.
 
@@ -66,7 +67,7 @@ Una vez ordenados los datos, la tabla tiene 1127 observaciones y 23 variables.
 Seleccionamos los datos de los países latinoamericanos y del Caribe y excluimos los datos etiquetados como "España", "Latin America & Caribbean" y "Mundo" y los agrupamos por año (Anio). Para eso, utilizamos la función "filter" y "group_by:
 
 ```{r}
-empleo_genero_ordenado|> filter(pais_region %in% c("Latin America & Caribbean", "Mundo", "EspaÃ±a"))|> 
+empleo_genero_ordenado|> filter(pais_region !="Latin America & Caribbean" & pais_region != "Mundo" & pais_region != "EspaÃ±a")|>
                       group_by(Anio)
                         
 ```
@@ -76,7 +77,7 @@ Podemos ver que, si agrupamos los datos por año, hay 49 grupos.
 Hacemos la misma operación pero filtrando por "pais_region":
 
 ```{r}
-empleo_genero_ordenado|> filter(pais_region %in% c("Latin America & Caribbean", "Mundo", "EspaÃ±a"))|> 
+empleo_genero_ordenado|> filter(pais_region !="Latin America & Caribbean" & pais_region != "Mundo" & pais_region != "EspaÃ±a")|>
                       group_by(pais_region)
 ```
 
@@ -89,7 +90,7 @@ A continuación seleccionamos algunas variables para calcular su valor medio, de
 #### \* Porcentaje de mujeres con rol de empleadoras, dentro del total de la fuerza laboral femenina (Año 2018)
 
 ```{r}
-empleo_genero_ordenado|> filter(pais_region %in% c("Latin America & Caribbean", "Mundo", "EspaÃ±a") & Anio == 2018)|> 
+empleo_genero_ordenado|> filter(pais_region !="Latin America & Caribbean" & pais_region != "Mundo" & pais_region != "EspaÃ±a" & Anio == 2018)|> 
                     summarise(empleadoras_promedio = mean(empleadoras_mujeres),
                               empleadoras_sd = sd(empleadoras_mujeres),
                               empleadoras_min = min(empleadoras_mujeres),
@@ -99,7 +100,7 @@ empleo_genero_ordenado|> filter(pais_region %in% c("Latin America & Caribbean", 
 #### \* Porcentaje de hombres con rol de empleadores, dentro del total de la fuerza laboral masculina (Año 2018)
 
 ```{r}
-empleo_genero_ordenado|> filter(pais_region %in% c("Latin America & Caribbean", "Mundo", "EspaÃ±a") & Anio == 2018)|> 
+empleo_genero_ordenado|> filter(pais_region !="Latin America & Caribbean" & pais_region != "Mundo" & pais_region != "EspaÃ±a" & Anio == 2018)|> 
                     summarise(empleadores_promedio = mean(empleadores_hombres),
                               empleadores_sd = sd(empleadores_hombres),
                               empleadores_min = min(empleadores_hombres),
@@ -112,7 +113,7 @@ empleo_genero_ordenado|> filter(pais_region %in% c("Latin America & Caribbean", 
 #### \* Porcentaje de mujeres trabajadoras por cuenta propia, dentro del total de la fuerza laboral femenina (Año 2018)
 
 ```{r}
-empleo_genero_ordenado|> filter(pais_region %in% c("Latin America & Caribbean", "Mundo", "EspaÃ±a") & Anio == 2018)|> 
+empleo_genero_ordenado|> filter(pais_region !="Latin America & Caribbean" & pais_region != "Mundo" & pais_region != "EspaÃ±a" & Anio == 2018)|> 
                 summarise(autoempleo_mujeres_prom = mean(autoempleo_mujeres),
                           autoempleo_mujeres_sd = sd(autoempleo_mujeres),
                           autoempleo_mujeres_min = min(autoempleo_mujeres),
@@ -122,7 +123,7 @@ empleo_genero_ordenado|> filter(pais_region %in% c("Latin America & Caribbean", 
 #### \* Porcentaje de hombres trabajadores por cuenta propia, dentro del total de la fuerza laboral masculina (Año 2018)
 
 ```{r}
-empleo_genero_ordenado|> filter(pais_region %in% c("Latin America & Caribbean", "Mundo", "EspaÃ±a") & Anio == 2018)|> 
+empleo_genero_ordenado|> filter(pais_region !="Latin America & Caribbean" & pais_region != "Mundo" & pais_region != "EspaÃ±a" & Anio == 2018)|> 
                 summarise(autoempleo_hombres_prom = mean(autoempleo_hombres),
                           autoempleo_hombres_sd = sd(autoempleo_hombres),
                           autoempleo_hombres_min = min(autoempleo_hombres),
@@ -198,7 +199,7 @@ ggplot(servicios_2018, aes(x=pais_region,y=valor, fill=servicios_x_genero))+
 ```
 
 
-Del grafico presentado podemos leer que nuestra hipotesis se confirma: el peso del sector industrial como empleador de la fuerza laboral masculina en los paises del Mercosur es mucho mayor que en el caso de la fuerza laboral femenina. Por otro lado, al analizar el sector servicios las variables se comportan de forma inversa, es decir que el dicho sector emplea en mayor proporcion a mujeres. 
+Del grafico presentado podemos leer que nuestra hipotesis se confirma: el peso del sector industrial como empleador de la fuerza laboral masculina en los paises del Mercosur es mucho mayor que en el caso de la fuerza laboral femenina. Por otro lado, al analizar el sector servicios las variables se comportan de forma inversa, es decir que dicho sector emplea en mayor proporcion a mujeres. 
 Entendemos que esto se debe al fenomeno llamado "segmentación vertical". Es decir, el hecho de que existan actividades economicas que emplean mayormente a varones, denominadas "masculinizadas" y actividades que emplean mayormente a mujeres, denominadas "feminizadas". 
 Esta inserción laboral diferenciada se debe a los estereotipos de género, los cuales determinan que haya ciertos trabajos considerados para mujeres y otros para varones. En este caso, por ser la industria un trabajo asociado socialmente a los varones, es una actividad altamente masculinizada y por lo tanto las mujeres tienen un acceso mucho menor. 
 
@@ -207,9 +208,9 @@ Esta inserción laboral diferenciada se debe a los estereotipos de género, los 
 
 -   ¿Se vio un incremento del peso de la industria como sector empleador de la fuerza laboral de mujeres en los ultimos 20 años en los paises del Mercosur?
 
-Para contestar nuestra segunda pregunta queremos ver especificamente que sucede en los años de los extremos con respecto a la variable que mide el porcentaje de mujeres que son empleadas en la industria y en servicios, dentro del total de la fuerza de trabajo de mujeres del pais. El objetivo es poder comparar el comportamiento de dicha variable entre los años 1998 y 2018 y luego graficar la variacion durante todos los años para verificar si hubo una reduccion o ampliacion del acceso al empleo industrial y de servicios por parte de mujeres y por lo tanto confirmar si el fenomeno que afirmamos en la hipotesis anterior se sostuvo, disminuyo o se proofundizó. 
+Para contestar nuestra segunda pregunta queremos ver especificamente que sucede en los años de los extremos con respecto a la variable que mide el porcentaje de mujeres que son empleadas en la industria y en servicios, dentro del total de la fuerza de trabajo de mujeres del pais. El objetivo es poder comparar el comportamiento de dicha variable entre los años 1998 y 2018 y luego graficar la variacion durante todos los años para verificar si hubo una reduccion o ampliacion del acceso al empleo industrial y de servicios por parte de mujeres y por lo tanto confirmar si el fenomeno que afirmamos en la hipotesis anterior se sostuvo, disminuyo o se profundizo. 
 
--Comenzaremos calculando la variación entre puntas para ambos sectores con el fin de verificar si es negativa o positiva.
+-Comenzaremos calculando la variacion entre puntas para ambos sectores con el fin de verificar si es negativa o positiva.
 
 ```{r}
 variacion_industria_mujeres <- select(empleo_genero, variable, pais_region, "1998", "2018")|>
