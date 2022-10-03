@@ -1,7 +1,9 @@
 ---
 title: "Empleo y Género"
 author: "Maria Florencia Aguilera y Rocío Ospitaleche"
-output: html_document
+output:
+  html_document:
+    code_folding: hide
 ---
 
 ## Introducción
@@ -11,10 +13,12 @@ En el presente informe se utilizan datos sobre empleo- desempleo y género prove
 Fuente de los datos: Extraídos y traducidos del sitio web del [Banco Mundial](https://databank.worldbank.org/source/gender-statistics).
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE )
 library(tidyr)
 library(readr)
 library(dplyr)
+library(ggplot2)
+library(gt)
 ```
 
 ## Exploración de los datos
@@ -28,19 +32,24 @@ empleo_genero <- read_csv("datos/empleo_genero.csv")
 Para ordenar los datos de la tabla utilizamos la función "pivot_longer". De esta forma, los datos de los años que aparecían como nombres de distintas columnas se agrupan dentro de una sola columna bajo el nombre "Anio". Y asignamos la nueva tabla a la variable "empleo_genero_largo"
 
 ```{r}
-empleo_genero_largo <- pivot_longer(empleo_genero, cols=4:52, names_to = "Anio", values_to = "Valor")
+empleo_genero_largo <- pivot_longer(empleo_genero, 
+                                    cols=4:52, 
+                                    names_to = "Anio", 
+                                    values_to = "Valor")
 ```
 
 ```{r}
 empleo_genero_largo
 ```
+Si bien en las primeras 10 filas podemos obervar que no existen datos en la columna "valor" (NA) esto se debe a que el set de datos original no cuenta con datos para los primeros 20 años. Sin embargo, esto no afectará nuestro trabajo ya que tomaremos en cuenta las variables y datos correspondientes a los últimos 20 años que si tienen valores válidos.
 
 Luego utilizamos la función "pivot_wider" para reordenar las variables que aparecían en la primera columna bajo la etiqueta "variable" y las ubicamos en distintas columnas. Y asignamos la nueva tabla a la variable "empleo_genero_ordenado", que es con la que vamos a trabajar.
 
 ```{r}
 empleo_genero_ordenado <- pivot_wider(empleo_genero_largo, 
                                       names_from = variable,
-                                      values_from = Valor)
+                                      values_from = Valor)|> 
+                          mutate(Anio=as.numeric(Anio))
 ```
 
 ```{r}
@@ -58,7 +67,7 @@ Una vez ordenados los datos, la tabla tiene 1127 observaciones y 23 variables.
 Seleccionamos los datos de los países latinoamericanos y del Caribe y excluimos los datos etiquetados como "España", "Latin America & Caribbean" y "Mundo" y los agrupamos por año (Anio). Para eso, utilizamos la función "filter" y "group_by:
 
 ```{r}
-empleo_genero_ordenado|> filter(pais_region !="Latin America & Caribbean" & pais_region != "Mundo" & pais_region != "EspaÃ±a")|> 
+empleo_genero_ordenado|> filter(pais_region !="Latin America & Caribbean" & pais_region != "Mundo" & pais_region != "EspaÃ±a")|>
                       group_by(Anio)
                         
 ```
@@ -68,7 +77,7 @@ Podemos ver que, si agrupamos los datos por año, hay 49 grupos.
 Hacemos la misma operación pero filtrando por "pais_region":
 
 ```{r}
-empleo_genero_ordenado|> filter(pais_region !="Latin America & Caribbean" & pais_region != "Mundo" & pais_region != "EspaÃ±a")|> 
+empleo_genero_ordenado|> filter(pais_region !="Latin America & Caribbean" & pais_region != "Mundo" & pais_region != "EspaÃ±a")|>
                       group_by(pais_region)
 ```
 
@@ -84,7 +93,8 @@ A continuación seleccionamos algunas variables para calcular su valor medio, de
 empleo_genero_ordenado|> filter(pais_region !="Latin America & Caribbean" & pais_region != "Mundo" & pais_region != "EspaÃ±a" & Anio == 2018)|> 
                     summarise(empleadoras_promedio = mean(empleadoras_mujeres),
                               empleadoras_sd = sd(empleadoras_mujeres),
-                              empleadoras_rango = range(empleadoras_mujeres))
+                              empleadoras_min = min(empleadoras_mujeres),
+                              empleadoras_max = max(empleadoras_mujeres))
 ```
 
 #### \* Porcentaje de hombres con rol de empleadores, dentro del total de la fuerza laboral masculina (Año 2018)
@@ -93,10 +103,12 @@ empleo_genero_ordenado|> filter(pais_region !="Latin America & Caribbean" & pais
 empleo_genero_ordenado|> filter(pais_region !="Latin America & Caribbean" & pais_region != "Mundo" & pais_region != "EspaÃ±a" & Anio == 2018)|> 
                     summarise(empleadores_promedio = mean(empleadores_hombres),
                               empleadores_sd = sd(empleadores_hombres),
-                              empleadores_rango = range(empleadores_hombres))
+                              empleadores_min = min(empleadores_hombres),
+                              empleadores_max = max(empleadores_hombres))
 ```
 
 -   En los países de América Latina y el Caribe en el año 2018, el promedio del porcentaje de mujeres dentro de la fuerza laboral femenina que tienen rol de empleadoras es de 2,41, con un desvío estándar de 1,02 (valor máx: 5,72 y valor mín: 0,72). Mientras que el promedio del porcentaje de hombres dentro de la fuerza laboral masculina con rol de empleadores es de 5,34 con un desvío estándar de 2,64 (valor máx: 14,96 y valor mín: 1,62).
+
 
 #### \* Porcentaje de mujeres trabajadoras por cuenta propia, dentro del total de la fuerza laboral femenina (Año 2018)
 
@@ -104,7 +116,8 @@ empleo_genero_ordenado|> filter(pais_region !="Latin America & Caribbean" & pais
 empleo_genero_ordenado|> filter(pais_region !="Latin America & Caribbean" & pais_region != "Mundo" & pais_region != "EspaÃ±a" & Anio == 2018)|> 
                 summarise(autoempleo_mujeres_prom = mean(autoempleo_mujeres),
                           autoempleo_mujeres_sd = sd(autoempleo_mujeres),
-                          autoempleo_mujeres_rango = range(autoempleo_mujeres))
+                          autoempleo_mujeres_min = min(autoempleo_mujeres),
+                          autoempleo_mujeres_max = max(autoempleo_mujeres))
 ```
 
 #### \* Porcentaje de hombres trabajadores por cuenta propia, dentro del total de la fuerza laboral masculina (Año 2018)
@@ -113,27 +126,207 @@ empleo_genero_ordenado|> filter(pais_region !="Latin America & Caribbean" & pais
 empleo_genero_ordenado|> filter(pais_region !="Latin America & Caribbean" & pais_region != "Mundo" & pais_region != "EspaÃ±a" & Anio == 2018)|> 
                 summarise(autoempleo_hombres_prom = mean(autoempleo_hombres),
                           autoempleo_hombres_sd = sd(autoempleo_hombres),
-                          autoempleo_hombres_rango = range(autoempleo_hombres))
+                          autoempleo_hombres_min = min(autoempleo_hombres),
+                          autoempleo_hombres_max = max(autoempleo_hombres))
 ```
 
 -   En los países de América Latina y el Caribe en el año 2018, el promedio del porcentaje de mujeres dentro de la fuerza laboral femenina trabajadoras por cuenta propia es de 30,00 con un desvío estándar de 16,40 (valor máx: 84,92 y valor mín: 5,49). Mientras que el promedio del porcentaje de hombres dentro de la fuerza laboral masculina trabajadores por cuenta propia es de 30,61 con un desvío estándar de 15,24 (valor máx: 80,95 y valor mín: 8,38).
 
+
+Cabe mencionar que luego de la exploracion de los datos definimos trabajar con nuevas variables para construir las hipotesis: nos concentraremos ahora en conocer la insercion laboral diferenciada por genero en el Mercosur observando el sector industrial y de servicios.
+
 ### Hipótesis
+-Existe una segmentacion horizontal en el mercado de trabajo de los paises del Mercosur por la cual las mujeres acceden en menor medida a empleos en la industria y en mayor medida en el sector servicios.
 
-Los datos de la tabla tienen muchas variables que pueden cruzarse con el objetivo de responder preguntas interesantes.
+-¿Se acortó esta brecha de acceso a empleos en la industria en los ultimos 20 años?
 
-Por ejemplo, podríamos relacionar empleo a tiempo parcial de las mujeres con el trabajo doméstico no remunerado:
+A continuación, nos proponemos responder y graficar algunas de las preguntas formuladas y llegar a una conclusión a traves del analisis de los datos.
 
-\*¿Existe una relación entre la cantidad de horas que dedican las mujeres al trabajo doméstico y de cuidado no remunerado y la cantidad de horas que dedican al empleo remunerado, expresado este por el porcentaje de la fuerza de trabajo femenina que tiene empleos a tiempo parcial?
+### Hipótesis 1
+-   Existe una segmentacion horizontal en el mercado de trabajo en los paises del mercosur por la cual las mujeres acceden en menor medida a empleos en la industria y en mayor medida a empleos en servicios.
 
-Otro ejemplo podría ser cruzar trabajo doméstico y de cuidado no remunerado con informalidad o autoempleo.
+-Para responder esta pregunta comenzamos filtrando los datos existentes para las variables a analizar, en los paises del mercosur dentro de los años que van de 1998 en adelante.
 
-\*¿Existe una relación entre la cantidad de tiempo dedicado al trabajo doméstico y de cuidado no remunerado y la cantidad de empleos informales? (teniendo en cuenta que estos tienen muchas veces mas flexibilidades para conciliar la vida laboral y familiar).
 
-Otras preguntas interesantes que se podrían responder cruzando la variable "Año" con otras variables son:
+```{r}
+empleo_mercosur <- select(empleo_genero_ordenado, pais_region, Anio, empleo_industria_mujeres, empleo_industria_hombres, empleo_servicios_mujeres, empleo_servicios_hombres) |>
+  filter(pais_region %in% c("Argentina", "Uruguay", "Paraguay", "Brasil", "Venezuela", "Bolivia" ))|> 
+  filter (Anio >= 1998)
+```
 
-\*¿Cómo fue la evolución del empleo en Latinoamérica y el Caribe desde 1970 hasta 2018? ¿Aumentó la participación de la mujer en el trabajo remunerado? ¿Aumentó la cantidad de tiempo que dedican los hombres al trabajo doméstico y de cuidado no remunerado? ¿Aumentó dentro de la fuerza laboral femenina la cantidad de mujeres que tienen rol de empleadoras?
+-Luego ordenamos la tabla, filtramos los datos disponibles para 2018 y graficamos como se comportan las variables en los distintos paises en dicho año.
 
-Por último, sería interesante cruzar la variable "Legislacion_acoso_sexual" con las distintas variables de empleo femenino.
+```{r}
+industria_2018 <- select(empleo_mercosur, pais_region, Anio, empleo_industria_mujeres, empleo_industria_hombres)|>
+  filter(pais_region %in% c("Argentina", "Uruguay", "Paraguay", "Brasil", "Venezuela", "Bolivia" ))|>
+  filter(Anio == 2018) |> 
+  pivot_longer(cols =c("empleo_industria_hombres","empleo_industria_mujeres"),
+               names_to = "industria_x_genero",  
+               values_to = "valor")
+ 
+```
 
-\*¿Hay una relación entre la existencia de legislación laboral contra el acoso sexual en el ámbito laboral con la participación de la mujer en el empleo formal?
+```{r}
+ggplot(industria_2018, aes(x=pais_region,y=valor, fill=industria_x_genero))+
+  geom_col(position = "dodge") +
+  ggtitle ("Brecha de acceso al empleo en industria - año 2018") + 
+  labs(x = "Paises Mercosur",y = "Porcentaje dentro de la fuerza laboral") + 
+  geom_text(aes(label = round(valor, digits = 1)),
+    position = position_dodge(0.9),
+    vjust = -0.5)+
+  theme_minimal()
+  
+```
+```{r}
+servicios_2018 <- select(empleo_mercosur, pais_region, Anio, empleo_servicios_mujeres, empleo_servicios_hombres)|>
+  filter(pais_region %in% c("Argentina", "Uruguay", "Paraguay", "Brasil", "Venezuela", "Bolivia" ))|>
+  filter(Anio == 2018) |> 
+  pivot_longer(cols =c("empleo_servicios_hombres","empleo_servicios_mujeres"),
+               names_to = "servicios_x_genero",  
+               values_to = "valor")
+```
+
+```{r}
+ggplot(servicios_2018, aes(x=pais_region,y=valor, fill=servicios_x_genero))+
+  geom_col(position = "dodge") +
+  ggtitle ("Brecha de acceso al empleo en el sector servicios - año 2018") + 
+  labs(x = "Paises Mercosur",y = "Porcentaje dentro de la fuerza laboral") + 
+  geom_text(aes(label = round(valor, digits = 1)),
+    position = position_dodge(0.9),
+    vjust = -0.5)+
+  theme_minimal()
+  
+```
+
+
+Del grafico presentado podemos leer que nuestra hipotesis se confirma: el peso del sector industrial como empleador de la fuerza laboral masculina en los paises del Mercosur es mucho mayor que en el caso de la fuerza laboral femenina. Por otro lado, al analizar el sector servicios las variables se comportan de forma inversa, es decir que dicho sector emplea en mayor proporcion a mujeres. 
+Entendemos que esto se debe al fenomeno llamado "segmentación vertical". Es decir, el hecho de que existan actividades economicas que emplean mayormente a varones, denominadas "masculinizadas" y actividades que emplean mayormente a mujeres, denominadas "feminizadas". 
+Esta inserción laboral diferenciada se debe a los estereotipos de género, los cuales determinan que haya ciertos trabajos considerados para mujeres y otros para varones. En este caso, por ser la industria un trabajo asociado socialmente a los varones, es una actividad altamente masculinizada y por lo tanto las mujeres tienen un acceso mucho menor. 
+
+
+### Hipotesis 2
+
+-   ¿Se vio un incremento del peso de la industria como sector empleador de la fuerza laboral de mujeres en los ultimos 20 años en los paises del Mercosur?
+
+Para contestar nuestra segunda pregunta queremos ver especificamente que sucede en los años de los extremos con respecto a la variable que mide el porcentaje de mujeres que son empleadas en la industria y en servicios, dentro del total de la fuerza de trabajo de mujeres del pais. El objetivo es poder comparar el comportamiento de dicha variable entre los años 1998 y 2018 y luego graficar la variacion durante todos los años para verificar si hubo una reduccion o ampliacion del acceso al empleo industrial y de servicios por parte de mujeres y por lo tanto confirmar si el fenomeno que afirmamos en la hipotesis anterior se sostuvo, disminuyo o se profundizo. 
+
+-Comenzaremos calculando la variacion entre puntas para ambos sectores con el fin de verificar si es negativa o positiva.
+
+```{r}
+variacion_industria_mujeres <- select(empleo_genero, variable, pais_region, "1998", "2018")|>
+  filter(pais_region %in% c("Argentina", "Uruguay", "Paraguay", "Brasil", "Venezuela", "Bolivia" )) |>
+  filter(variable == "empleo_industria_mujeres")|>
+  mutate(variacion =`2018`-`1998`)
+```
+
+```{r}
+variacion_industria_mujeres %>%
+  group_by(pais_region) %>% 
+  gt(caption = "Porcentaje de la fuerza laboral femenina empleada en el sector industrial") %>% 
+  tab_header(title = "Variación entre 1998 y 2018") %>%
+  cols_label(variacion = "Variación en p.p", variable = "Variable por País") %>%
+  fmt_number(columns = variacion, decimals = 1, dec_mark = ",")
+```
+
+```{r}
+variacion_servicios_mujeres <- select(empleo_genero, variable, pais_region, "1998", "2018")|>
+  filter(pais_region %in% c("Argentina", "Uruguay", "Paraguay", "Brasil", "Venezuela", "Bolivia" )) |>
+  filter(variable == "empleo_servicios_mujeres")|>
+  mutate(variacion =`2018`-`1998`)
+
+```
+
+
+```{r}
+variacion_servicios_mujeres %>%
+  group_by(pais_region) %>% 
+  gt(caption = "Porcentaje de la fuerza laboral femenina empleada en el sector servicios") %>% 
+  tab_header(title = "Variación entre 1998 y 2018") %>%
+  cols_label(variacion = "Variación en p.p", variable = "Variable por País") %>%
+  fmt_number(columns = variacion, decimals = 1, dec_mark = ",")
+```
+Como podemos ver en ambas tablas, la variación es negativa en el caso del acceso de mujeres al empleo en la industria y positiva en el caso del acceso al sector servicios es decir que el fenomeno descripto anteriormente se profundizó.
+
+
+## Presentación grafica de la variación
+
+A continuacion presentaremos graficamente la variacion entre puntas y la variacion en toda la serie para exponer la evolucion a lo largo del tiempo
+
+```{r}
+industria_1998_2018 <- select(empleo_mercosur, pais_region, Anio, empleo_industria_mujeres)|>
+  filter(Anio == 1998 | Anio == 2018) 
+```
+
+```{r}
+industria_1998_2018 |>
+mutate(Anio=as.character(Anio)) |>
+ggplot(aes(x=pais_region,y=empleo_industria_mujeres, fill=Anio))+
+  geom_col(position = "dodge") +
+  scale_fill_manual(values = c("1998" = "#FFDAB9", "2018" = "#41B7C4")) +
+   ggtitle ("Porcentaje de la fuerza laboral femenina que trabaja en industria, 
+               en 1998 y 2018, para cada pais del Mercosur") + 
+  labs(x = "Paises Mercosur",y = "Porcentaje (%)") +
+  geom_text(aes(label = round(empleo_industria_mujeres, digits = 1)),
+    position = position_dodge(0.9),
+    vjust = -0.5) +
+  theme_minimal()
+```
+```{r}
+
+ggplot(empleo_mercosur, aes(x = Anio, y = empleo_industria_mujeres, group = pais_region)) +
+  geom_line (aes(colour = pais_region), size = 0.8)  +
+    scale_y_continuous(limits= c(7, 15))+
+  labs(title = "Variación del porcentaje de la fuerza laboral femenina 
+        que trabaja en la industria, entre 1998 y 2018, 
+             para cada pais del Mercosur",
+       x = "Año",
+       y = "Porcentaje(%)") +
+theme_minimal() +
+  theme (axis.text.x= element_text(  angle= 90, hjust= 1),
+         legend.title = element_text(color ="white"))
+```
+\*A su vez podemos ver como la participacion de mujeres disminuye en el sector industrial y aumenta en el sector servicios
+
+```{r}
+servicios_1998_2018 <- select(empleo_mercosur, pais_region, Anio, empleo_servicios_mujeres)|>
+  filter(Anio == 1998 | Anio == 2018) 
+```
+
+```{r}
+servicios_1998_2018 |>
+mutate(Anio=as.character(Anio)) |>
+ggplot(aes(x=pais_region,y=empleo_servicios_mujeres, fill=Anio))+
+  geom_col(position = "dodge") +
+  scale_fill_manual(values = c("1998" = "#FFDAB9", "2018" = "#41B7C4")) +
+  ggtitle ("Porcentaje de la fuerza laboral femenina que trabaja en servicios, 
+               en 1998 y 2018, para cada pais del Mercosur") + 
+  labs(x = "Paises Mercosur",y = "Porcentaje (%)") +
+  geom_text(aes(label = round(empleo_servicios_mujeres, digits = 1)),
+    position = position_dodge(0.9),
+    vjust = -0.5) +
+  theme_minimal()
+```
+
+
+```{r}
+
+ggplot(empleo_mercosur, aes(x = Anio, y = empleo_servicios_mujeres, group = pais_region)) +
+  geom_line (aes(colour = pais_region), size = 0.8)  +
+    scale_y_continuous(limits= c(40, 95))+
+  labs(title = "Variación del porcentaje de la fuerza laboral femenina 
+        que trabaja en servicios, entre 1998 y 2018, 
+             para cada pais del Mercosur",
+       x = "Año",
+       y = "Porcentaje(%)") +
+theme_minimal() +
+  theme (axis.text.x= element_text(  angle= 90, hjust= 1),
+         legend.title = element_text(color ="white"))
+```
+
+         
+         
+## Conclusión
+
+\*A partir de la lectura del grafico podemos concluir que en el periodo 1998 - 2018 no solo no creció el acceso de las mujeres a empleos en la industria sino que disminuyó. La tasa de variacion en todos los paises es negativa, lo cual nos muestra que el porcentaje de mujeres que tienen empleos dentro del sector industrial se redujo entre los años mencionados.
+A su vez, lo contrario sucede con los empleos en el sector servicios, en el cual la tasa de variación es positiva, en decir que las mujeres han aumentado su participacion en los ultimos 20 años.
+Como ya mencionamos, entendemos que esto se debe a estereotipos que sostienen una division sexual del trabajo y determinan desigualdades estructurales segun genero en el acceso al empleo.
